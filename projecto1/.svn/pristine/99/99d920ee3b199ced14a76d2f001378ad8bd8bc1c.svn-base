@@ -1,0 +1,50 @@
+#ifndef ORTHOCAMERA_H
+#define ORTHOCAMERA_H
+
+#include "CGF\CGFcamera.h"
+
+#include <string>
+
+class OrthoCamera : public CGFcamera
+
+{
+private:
+	bool enabled;
+	std::string id;
+	std::string direction;
+	float near, far, left, right, top, bottom;
+	bool defaultCamera;
+
+public:
+
+	OrthoCamera(std::string id, bool enabled);
+	~OrthoCamera(void);
+
+	bool setEnabled(bool opt);
+
+	void setNear(float v);
+	float getNear();
+
+	void setFar(float v);
+	float getFar();
+
+	void setDirection(std::string dir);
+	std::string getDirection();
+
+	void setLeft(float v);
+	float getLeft();
+
+	void setRight(float v);
+	float getRight();
+
+	void setTop(float v);
+	float getTop();
+
+	void setBottom(float v);
+	float getBottom();
+
+
+
+
+};
+#endif

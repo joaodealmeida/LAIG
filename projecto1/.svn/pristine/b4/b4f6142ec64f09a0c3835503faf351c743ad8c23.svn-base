@@ -1,0 +1,32 @@
+#include "CGF\CGFlight.h"
+#include "Components.h"
+
+class SpotLight : public CGFlight
+{
+public:
+	SpotLight(unsigned int lightid, float* pos, float *dir, std::string id, bool marker, float* target, float angle,float exponent) : CGFlight(lightid, pos, dir){
+		this->id=id;
+		this->marker=marker;
+		this->target[0]=target[0];
+		this->target[1]=target[1];
+		this->target[2]=target[2];
+		this->target[3]=target[3];
+		this->angle=angle;
+		this->exponent=exponent;
+		lightComponent = nullptr;
+	}
+	void setComponent (Components *c1){
+		lightComponent=c1;
+	}
+
+private:
+	std::string id;
+	bool marker;
+	float target[4],angle,exponent;
+	Components *lightComponent;
+};
+
+
+
+
+

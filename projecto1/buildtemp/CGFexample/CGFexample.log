@@ -1,0 +1,36 @@
+﻿Build started 19/10/2014 15:37:33.
+     1>Project "C:\Users\João\Dropbox\Development\LAIG\CGFexample\CGFexample.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"..\buildtemp\CGFexample\\" /Fd"..\buildtemp\CGFexample\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt src\DemoScene.cpp src\main.cpp
+         main.cpp
+         DemoScene.cpp
+         Generating Code...
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"bin\CGFexample.exe" /INCREMENTAL /NOLOGO glew32.lib CGFlib.lib TinyXML.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /NODEFAULTLIB:LIBCMT.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"bin\CGFexample.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"bin\CGFexample.lib" /MACHINE:X86 ..\buildtemp\CGFexample\OrthoCamera.obj
+         ..\buildtemp\CGFexample\PerspectiveCamera.obj
+         ..\buildtemp\CGFexample\DemoScene.obj
+         ..\buildtemp\CGFexample\main.obj
+         ..\buildtemp\CGFexample\TPinterface.obj
+         ..\buildtemp\CGFexample\XMLScene.obj
+     1>CGFlib.lib(CGFappearance.obj) : warning LNK4099: PDB 'vc110.pdb' was not found with 'CGFlib.lib(CGFappearance.obj)' or at 'C:\Users\JoÒo\Dropbox\Development\LAIG\CGFexample\bin\vc110.pdb'; linking object as if no debug info
+     1>CGFlib.lib(CGFapplication.obj) : warning LNK4099: PDB 'vc110.pdb' was not found with 'CGFlib.lib(CGFapplication.obj)' or at 'C:\Users\JoÒo\Dropbox\Development\LAIG\CGFexample\bin\vc110.pdb'; linking object as if no debug info
+     1>CGFlib.lib(CGFaxis.obj) : warning LNK4099: PDB 'vc110.pdb' was not found with 'CGFlib.lib(CGFaxis.obj)' or at 'C:\Users\JoÒo\Dropbox\Development\LAIG\CGFexample\bin\vc110.pdb'; linking object as if no debug info
+     1>CGFlib.lib(CGFcamera.obj) : warning LNK4099: PDB 'vc110.pdb' was not found with 'CGFlib.lib(CGFcamera.obj)' or at 'C:\Users\JoÒo\Dropbox\Development\LAIG\CGFexample\bin\vc110.pdb'; linking object as if no debug info
+     1>CGFlib.lib(CGFinterface.obj) : warning LNK4099: PDB 'vc110.pdb' was not found with 'CGFlib.lib(CGFinterface.obj)' or at 'C:\Users\JoÒo\Dropbox\Development\LAIG\CGFexample\bin\vc110.pdb'; linking object as if no debug info
+     1>CGFlib.lib(CGFlight.obj) : warning LNK4099: PDB 'vc110.pdb' was not found with 'CGFlib.lib(CGFlight.obj)' or at 'C:\Users\JoÒo\Dropbox\Development\LAIG\CGFexample\bin\vc110.pdb'; linking object as if no debug info
+     1>CGFlib.lib(CGFobject.obj) : warning LNK4099: PDB 'vc110.pdb' was not found with 'CGFlib.lib(CGFobject.obj)' or at 'C:\Users\JoÒo\Dropbox\Development\LAIG\CGFexample\bin\vc110.pdb'; linking object as if no debug info
+     1>CGFlib.lib(CGFscene.obj) : warning LNK4099: PDB 'vc110.pdb' was not found with 'CGFlib.lib(CGFscene.obj)' or at 'C:\Users\JoÒo\Dropbox\Development\LAIG\CGFexample\bin\vc110.pdb'; linking object as if no debug info
+     1>CGFlib.lib(CGFshader.obj) : warning LNK4099: PDB 'vc110.pdb' was not found with 'CGFlib.lib(CGFshader.obj)' or at 'C:\Users\JoÒo\Dropbox\Development\LAIG\CGFexample\bin\vc110.pdb'; linking object as if no debug info
+     1>CGFlib.lib(CGFtexture.obj) : warning LNK4099: PDB 'vc110.pdb' was not found with 'CGFlib.lib(CGFtexture.obj)' or at 'C:\Users\JoÒo\Dropbox\Development\LAIG\CGFexample\bin\vc110.pdb'; linking object as if no debug info
+     1>CGFlib.lib(imagetools.obj) : warning LNK4099: PDB 'vc110.pdb' was not found with 'CGFlib.lib(imagetools.obj)' or at 'C:\Users\JoÒo\Dropbox\Development\LAIG\CGFexample\bin\vc110.pdb'; linking object as if no debug info
+     1>CGFlib.lib(stb_image.obj) : warning LNK4099: PDB 'vc110.pdb' was not found with 'CGFlib.lib(stb_image.obj)' or at 'C:\Users\JoÒo\Dropbox\Development\LAIG\CGFexample\bin\vc110.pdb'; linking object as if no debug info
+     1>TinyXML.lib(tinystr.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'TinyXML.lib(tinystr.obj)' or at 'C:\Users\JoÒo\Dropbox\Development\LAIG\CGFexample\bin\vc100.pdb'; linking object as if no debug info
+     1>TinyXML.lib(tinyxml.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'TinyXML.lib(tinyxml.obj)' or at 'C:\Users\JoÒo\Dropbox\Development\LAIG\CGFexample\bin\vc100.pdb'; linking object as if no debug info
+     1>TinyXML.lib(tinyxmlerror.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'TinyXML.lib(tinyxmlerror.obj)' or at 'C:\Users\JoÒo\Dropbox\Development\LAIG\CGFexample\bin\vc100.pdb'; linking object as if no debug info
+     1>TinyXML.lib(tinyxmlparser.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'TinyXML.lib(tinyxmlparser.obj)' or at 'C:\Users\JoÒo\Dropbox\Development\LAIG\CGFexample\bin\vc100.pdb'; linking object as if no debug info
+         CGFexample.vcxproj -> C:\Users\João\Dropbox\Development\LAIG\CGFexample\bin\CGFexample.exe
+     1>Done Building Project "C:\Users\João\Dropbox\Development\LAIG\CGFexample\CGFexample.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:02.02

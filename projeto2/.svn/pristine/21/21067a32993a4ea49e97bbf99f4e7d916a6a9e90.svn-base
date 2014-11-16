@@ -1,0 +1,22 @@
+#ifndef PLANE_H
+#define PLANE_H
+
+#include <CGF\CGFobject.h>
+#include "Primitives.h"
+
+class Plane : public CGFobject, public Primitives {
+public:
+	Plane(GLenum drawstyle, GLenum normal, int parts);
+	~Plane();
+	void draw();
+
+
+private:
+	static const GLfloat controlPoints[4][3];
+	static const GLfloat normalComponent[4][3];
+	static const GLfloat texturePoints[4][2];
+	static const GLfloat colorPoints[4][4];
+	int parts;
+};
+
+#endif

@@ -1,0 +1,22 @@
+#include "CGF\CGFlight.h"
+#include "Components.h"
+
+class OmniLight : public CGFlight
+{
+public:
+	OmniLight(unsigned int lightid, float* pos, float *dir, string id, bool marker) : CGFlight(lightid,pos,dir){
+		this->id=id;
+		this->marker=marker;
+	}
+
+	void setComponent (Components *c1){
+		lightComponent=c1;
+	}
+
+private:
+	bool marker;
+	string id;
+	Components *lightComponent;
+	
+
+};

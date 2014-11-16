@@ -1,0 +1,92 @@
+#pragma once
+
+#include <string>
+#include <vector>
+#include "Appearance.h"
+#include "Transforms.h"
+
+class Node
+{
+public:
+	Node(string id){
+		this->id=id;
+	}
+
+	~Node(void){}
+
+	void setAppearanceRef(std::string app_ref){
+		this->appearance_ref=app_ref;
+	}
+
+	std::string getAppearanceRef(){
+		return appearance_ref;
+	}
+
+	void setAppearance(Appearance *app){
+		this->appearance=app;
+	}
+
+	Appearance * getAppearance(){
+		if(inherited_app)
+			this->parent->getAppearance();
+	}
+
+	void addDescendantsRef(std::string desc_ref){
+		this->descendants_ref.push_back(desc_ref);
+	}
+
+	void delDescendentsRef(std::string desc_ref){
+		vector<string>::iterator it = std::find(descendants_ref.begin(), descendants_ref.end(), desc_ref);
+        
+        if (it != descendants_ref.end())
+            descendants_ref.erase(it);
+	}
+
+	std::vector<std::string> getDescendantsRef(){
+		return descendants_ref;
+	}
+
+	void addDescendants(Node *n){
+		descendants.push_back(n);
+	}
+
+	void delDescendants(Node *n){
+		vector<Node *>::iterator it = std::find(descendants.begin(), descendants.end(), n);
+        
+        if (it != descendants.end())
+            descendants.erase(it);
+	}
+
+	void addTransform(Transforms *t){
+		transforms.push_back(t);
+	}
+
+	std::vector<Transforms *> getTransforms(){
+		return transforms;
+	}
+
+	std::vector<Primitives *> addPrimitive(Primitives *p1){
+		primitives.push_back(p1);
+	}
+
+	void setParent(Node* n){
+		this->parent=n;
+	}
+
+	Node * getParent(){
+		return parent;
+	}
+
+private:
+	std::string id;
+	std::vector<Node* > descendants;
+	std::vector<std::string> descendants_ref;
+	std::vector<Transforms *> transforms;
+	std::vector<Primitives *> primitives;
+	Node* parent;
+	Appearance *appearance;
+	std::string appearance_ref;
+	bool inherited_app;
+
+};
+

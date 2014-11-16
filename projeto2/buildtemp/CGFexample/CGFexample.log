@@ -1,0 +1,135 @@
+﻿Build started 14/11/2014 14:58:06.
+     1>Project "C:\Users\João\Dropbox\Development\LAIG\projeto2\laig-p2\CGFexample.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"..\buildtemp\CGFexample\\" /Fd"..\buildtemp\CGFexample\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt src\DemoScene.cpp src\Plane.cpp src\TPinterface.cpp src\XMLScene.cpp src\main.cpp
+         DemoScene.cpp
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\node.h(118): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\node.h(135): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\node.h(140): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\node.h(143): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\demoscene.cpp(18): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\demoscene.cpp(20): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\demoscene.cpp(23): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\demoscene.cpp(25): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\demoscene.cpp(165): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\demoscene.cpp(171): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\demoscene.cpp(193): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\demoscene.cpp(204): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\demoscene.cpp(225): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\demoscene.cpp(237): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\demoscene.cpp(265): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\demoscene.cpp(271): warning C4018: '<' : signed/unsigned mismatch
+         Generating Code...
+         Compiling...
+         main.cpp
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\node.h(118): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\node.h(135): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\node.h(140): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\node.h(143): warning C4018: '<' : signed/unsigned mismatch
+         XMLScene.cpp
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\node.h(118): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\node.h(135): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\node.h(140): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\node.h(143): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\xmlscene.cpp(64): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\xmlscene.cpp(68): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\xmlscene.cpp(115): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\xmlscene.cpp(128): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\xmlscene.cpp(131): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\xmlscene.cpp(134): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\xmlscene.cpp(160): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\xmlscene.cpp(167): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\xmlscene.cpp(247): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(325) : see declaration of 'sscanf'
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\xmlscene.cpp(334): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(325) : see declaration of 'sscanf'
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\xmlscene.cpp(389): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(325) : see declaration of 'sscanf'
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\xmlscene.cpp(400): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(325) : see declaration of 'sscanf'
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\xmlscene.cpp(544): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(325) : see declaration of 'sscanf'
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\xmlscene.cpp(567): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(325) : see declaration of 'sscanf'
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\xmlscene.cpp(610): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(325) : see declaration of 'sscanf'
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\xmlscene.cpp(624): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(325) : see declaration of 'sscanf'
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\xmlscene.cpp(638): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(325) : see declaration of 'sscanf'
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\xmlscene.cpp(753): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(325) : see declaration of 'sscanf'
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\xmlscene.cpp(764): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(325) : see declaration of 'sscanf'
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\xmlscene.cpp(775): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(325) : see declaration of 'sscanf'
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\xmlscene.cpp(796): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\xmlscene.cpp(821): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(325) : see declaration of 'sscanf'
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\xmlscene.cpp(826): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(325) : see declaration of 'sscanf'
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\xmlscene.cpp(839): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(325) : see declaration of 'sscanf'
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\xmlscene.cpp(844): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(325) : see declaration of 'sscanf'
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\xmlscene.cpp(849): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(325) : see declaration of 'sscanf'
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\xmlscene.cpp(986): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(325) : see declaration of 'sscanf'
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\xmlscene.cpp(1012): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(325) : see declaration of 'sscanf'
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\xmlscene.cpp(1052): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\xmlscene.cpp(1062): warning C4018: '<' : signed/unsigned mismatch
+         TPinterface.cpp
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\node.h(118): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\node.h(135): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\node.h(140): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\node.h(143): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\tpinterface.cpp(30): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\tpinterface.cpp(38): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\tpinterface.cpp(54): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\tpinterface.cpp(60): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\tpinterface.cpp(75): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\tpinterface.cpp(77): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\tpinterface.cpp(84): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\tpinterface.cpp(86): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\tpinterface.cpp(93): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\tpinterface.cpp(95): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\tpinterface.cpp(132): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\tpinterface.cpp(136): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\projeto2\laig-p2\src\tpinterface.cpp(139): warning C4018: '<' : signed/unsigned mismatch
+         Plane.cpp
+         Generating Code...
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"bin\CGFexample.exe" /NOLOGO glew32.lib CGFlib.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"..\buildtemp\CGFexample\CGFexample.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\João\Dropbox\Development\LAIG\projeto2\laig-p2\bin\CGFexample.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"bin\CGFexample.lib" /MACHINE:X86 ..\buildtemp\CGFexample\DemoScene.obj
+         ..\buildtemp\CGFexample\main.obj
+         ..\buildtemp\CGFexample\OrthoCamera.obj
+         ..\buildtemp\CGFexample\PerspectiveCamera.obj
+         ..\buildtemp\CGFexample\Plane.obj
+         ..\buildtemp\CGFexample\tinystr.obj
+         ..\buildtemp\CGFexample\tinyxml.obj
+         ..\buildtemp\CGFexample\tinyxmlerror.obj
+         ..\buildtemp\CGFexample\tinyxmlparser.obj
+         ..\buildtemp\CGFexample\TPinterface.obj
+         ..\buildtemp\CGFexample\XMLScene.obj
+         LINK : bin\CGFexample.exe not found or not built by the last incremental link; performing full link
+     1>CGFlib.lib(CGFappearance.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'CGFlib.lib(CGFappearance.obj)' or at 'C:\Users\João\Dropbox\Development\LAIG\projeto2\laig-p2\bin\vc100.pdb'; linking object as if no debug info
+     1>CGFlib.lib(CGFapplication.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'CGFlib.lib(CGFapplication.obj)' or at 'C:\Users\João\Dropbox\Development\LAIG\projeto2\laig-p2\bin\vc100.pdb'; linking object as if no debug info
+     1>CGFlib.lib(CGFaxis.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'CGFlib.lib(CGFaxis.obj)' or at 'C:\Users\João\Dropbox\Development\LAIG\projeto2\laig-p2\bin\vc100.pdb'; linking object as if no debug info
+     1>CGFlib.lib(CGFcamera.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'CGFlib.lib(CGFcamera.obj)' or at 'C:\Users\João\Dropbox\Development\LAIG\projeto2\laig-p2\bin\vc100.pdb'; linking object as if no debug info
+     1>CGFlib.lib(CGFinterface.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'CGFlib.lib(CGFinterface.obj)' or at 'C:\Users\João\Dropbox\Development\LAIG\projeto2\laig-p2\bin\vc100.pdb'; linking object as if no debug info
+     1>CGFlib.lib(CGFlight.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'CGFlib.lib(CGFlight.obj)' or at 'C:\Users\João\Dropbox\Development\LAIG\projeto2\laig-p2\bin\vc100.pdb'; linking object as if no debug info
+     1>CGFlib.lib(CGFobject.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'CGFlib.lib(CGFobject.obj)' or at 'C:\Users\João\Dropbox\Development\LAIG\projeto2\laig-p2\bin\vc100.pdb'; linking object as if no debug info
+     1>CGFlib.lib(CGFscene.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'CGFlib.lib(CGFscene.obj)' or at 'C:\Users\João\Dropbox\Development\LAIG\projeto2\laig-p2\bin\vc100.pdb'; linking object as if no debug info
+     1>CGFlib.lib(CGFshader.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'CGFlib.lib(CGFshader.obj)' or at 'C:\Users\João\Dropbox\Development\LAIG\projeto2\laig-p2\bin\vc100.pdb'; linking object as if no debug info
+     1>CGFlib.lib(CGFtexture.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'CGFlib.lib(CGFtexture.obj)' or at 'C:\Users\João\Dropbox\Development\LAIG\projeto2\laig-p2\bin\vc100.pdb'; linking object as if no debug info
+     1>CGFlib.lib(imagetools.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'CGFlib.lib(imagetools.obj)' or at 'C:\Users\João\Dropbox\Development\LAIG\projeto2\laig-p2\bin\vc100.pdb'; linking object as if no debug info
+     1>CGFlib.lib(stb_image.obj) : warning LNK4099: PDB 'vc100.pdb' was not found with 'CGFlib.lib(stb_image.obj)' or at 'C:\Users\João\Dropbox\Development\LAIG\projeto2\laig-p2\bin\vc100.pdb'; linking object as if no debug info
+         CGFexample.vcxproj -> C:\Users\João\Dropbox\Development\LAIG\projeto2\laig-p2\bin\CGFexample.exe
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"bin\CGFexample.exe;#1" /manifest ..\buildtemp\CGFexample\CGFexample.exe.intermediate.manifest
+     1>Done Building Project "C:\Users\João\Dropbox\Development\LAIG\projeto2\laig-p2\CGFexample.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:14.05

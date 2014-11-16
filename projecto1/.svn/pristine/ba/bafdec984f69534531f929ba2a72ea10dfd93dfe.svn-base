@@ -1,0 +1,23 @@
+#pragma once
+
+#include <string>
+#include <vector>
+#include "Appearance.h"
+
+class Node
+{
+public:
+	Node(string id){
+		this->id=id;
+	}
+	~Node(void);
+private:
+	std::string id;
+	std::string appearance_ref;
+	std::vector<Node* > descendants;
+	Node* parent;
+	Appearance *appearance;
+	bool inherited_app;
+
+};
+

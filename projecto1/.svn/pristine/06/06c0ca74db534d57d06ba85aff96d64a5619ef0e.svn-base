@@ -1,0 +1,32 @@
+#ifndef TEXTURE_H
+#define TEXTURE_H
+
+#include "CGF\CGFtexture.h"
+class Texture : public CGFtexture
+{
+public:
+	Texture(string name, string id, int s, int t) : CGFtexture(){
+		texName=name;
+		this->id=id;
+		this->texWidth=s;
+		this->texHeight=t;
+	}
+
+	string getID(){
+		return id;
+	}
+
+	int getS(){
+		return texWidth;
+	}
+	int getT(){
+		return texHeight;
+	}
+private:
+
+	std::string id;
+
+
+};
+#endif
+

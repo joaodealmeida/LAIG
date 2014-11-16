@@ -1,0 +1,71 @@
+#include "PerspectiveCamera.h"
+
+PerspectiveCamera::PerspectiveCamera(std::string id, bool enabled){
+	this->id=id;
+	this->enabled=enabled;
+}
+
+PerspectiveCamera::~PerspectiveCamera(){
+}
+
+bool PerspectiveCamera::setEnabled(bool opt){
+        if (opt) {
+			if (defaultCamera)
+                return false;
+            
+            defaultCamera = true;
+            enabled = true;
+			return true;
+        } else {
+            if (!enabled)
+                return false;
+            
+            defaultCamera = false;
+			enabled = false;
+            return true;
+        }
+}
+
+
+void PerspectiveCamera::setNear(float v){
+	near=v;
+}
+void PerspectiveCamera::setFar(float v){
+	far=v;
+}
+
+void PerspectiveCamera::setAngle(float v){
+	angle=v;
+}
+bool PerspectiveCamera::getEnabled(){
+	return enabled;
+}
+
+
+
+float PerspectiveCamera::getNear(){
+	return near;
+}
+float PerspectiveCamera::getFar(){
+	return far;
+}
+float PerspectiveCamera::getAngle(){
+	return angle;
+}
+
+void PerspectiveCamera::setTarget(float * targetArray){
+	this->target[0]=targetArray[1];
+	this->target[1]=targetArray[2];
+	this->target[2]=targetArray[3];
+}
+void PerspectiveCamera::setPosition(float * positionArray){
+	this->position[0]=positionArray[1];
+	this->position[1]=positionArray[2];
+	this->position[2]=positionArray[3];
+}
+float * PerspectiveCamera::getPosition(){
+	return position;
+}
+float * PerspectiveCamera::getTarget(){
+	return target;
+}

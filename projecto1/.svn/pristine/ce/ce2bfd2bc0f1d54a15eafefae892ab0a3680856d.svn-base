@@ -1,0 +1,39 @@
+#ifndef DEMOSCENE_H
+#define DEMOSCENE_H
+
+#include "CGFscene.h"
+#include "CGFshader.h"
+#include "XMLScene.h"
+
+class DemoScene : public CGFscene
+{
+public:
+	void init();
+	void display();
+	void update(unsigned long t);
+	~DemoScene();
+private:
+	//Globals Data
+
+	std::string drawMode,shading, cullFace, cullOrder;
+	GLboolean lightDoubleSided, lightLocal, lightEnabled;
+	GLfloat drawBackground[4], lightAmbient[4];
+
+	//Textures
+	std::vector<Texture *> texturesVec;
+
+	//Appearances
+	std::vector<Appearance *> appearancesVec;
+
+	//Graph
+	Graph* sceneGraph;
+
+	CGFlight* light0;
+	CGFobject* obj;
+	CGFobject* obj2;
+	CGFappearance* materialAppearance;
+	CGFappearance* textureAppearance;
+	CGFshader* shader;
+};
+
+#endif

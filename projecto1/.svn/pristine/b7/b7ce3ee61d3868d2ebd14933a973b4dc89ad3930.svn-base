@@ -1,0 +1,76 @@
+#ifndef _XMLSCENE_H_
+#define _XMLSCENE_H_
+
+#include "tinyxml.h"
+#include <GL\glut.h>
+#include <string>
+#include <iostream>
+#include <vector>
+#include "PerspectiveCamera.h"
+#include "OrthoCamera.h"
+#include "OmniLight.h"
+#include "SpotLight.h"
+#include "Components.h"
+#include "Texture.h"
+#include "Appearance.h"
+#include "Primitives.h"
+
+class XMLScene
+{
+public:
+	XMLScene(char *filename);
+	~XMLScene();
+
+	static TiXmlElement *findChildByAttribute(TiXmlElement *parent,const char * attr, const char *val);
+	void parseGlobals(TiXmlElement *globalsElement);
+	void parseCameras(TiXmlElement *camerasElement);
+	void parseLights(TiXmlElement *lightsElement);
+	void parseTextures(TiXmlElement *texturesElement);
+	void parseAppearances(TiXmlElement *appearancesElement);
+	std::vector<Primitives *> parsePrimitives(TiXmlElement *primitivesElement);
+	
+
+	TiXmlDocument* doc;
+
+	TiXmlElement* globalsElement;
+	TiXmlElement* camerasElement;
+	TiXmlElement* lightsElement;
+	TiXmlElement* texturesElement;
+	TiXmlElement* appearancesElement;
+
+
+	//Globals Data
+
+	std::string drawMode,shading, cullFace, cullOrder;
+	GLboolean lightDoubleSided, lightLocal, lightEnabled;
+	GLfloat drawBackground[4], lightAmbient[4];
+
+	//Cameras Data
+	std::vector <PerspectiveCamera *> PerscamVec;
+	std::vector <OrthoCamera *> OrthocamVec;
+
+	//Lights
+	std::vector <OmniLight *> omniLightVec;
+	std::vector <SpotLight *> spotLightVec;
+
+	//Textures
+	std::vector<Texture *> texturesVec;
+
+	//Appearances
+	std::vector<Appearance *> appearancesVec;
+
+	//Primitives
+	std::vector<Primitives *> primitivesVec;
+
+
+
+
+	TiXmlElement* initElement; 
+	TiXmlElement* matsElement;
+	TiXmlElement* textsElement;
+	TiXmlElement* leavesElement;
+	TiXmlElement* nodesElement;
+	TiXmlElement* graphElement;
+};
+
+#endif

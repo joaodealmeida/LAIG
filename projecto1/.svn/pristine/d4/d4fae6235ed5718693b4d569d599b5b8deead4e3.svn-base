@@ -1,0 +1,101 @@
+#ifndef TORUS_H
+#define TORUS_H
+
+#include "CGF\CGFobject.h"
+#include "Primitives.h"
+#define M_PI 3.14159265358979323846264338327950288
+
+class Torus : public CGFobject, public Primitives
+{
+public:
+	Torus(float inner, float outer, float slices, float loops){
+		this->inner = inner;
+        this->outer = outer;
+        this->slices = slices;
+        this->loops = loops;
+ 
+        /* Checks */
+        if (this->slices < 1) {
+                this->slices = 1;
+        }
+ 
+        if (this->loops < 1) {
+                this->loops = 1;
+        }
+ 
+        /* Increment the number of sides and rings to allow for one more point than surface */
+        slices++;
+        loops++;
+ 
+        /* Allocate the vertices array */
+        vertex = (double *) calloc (sizeof(double), 3 * slices * loops);
+        normal = (double *) calloc (sizeof(double), 3 * slices * loops);
+ 
+        /* Precalc */
+        double dpsi, dphi;
+        double spsi, cpsi, sphi, cphi;
+        double phi, psi;
+ 
+        dpsi = 2.0 * M_PI / (double) (loops - 1);
+        dphi = -2.0 * M_PI / (double) (slices - 1);
+ 
+        psi = 0.0;
+ 
+        for (int j = 0; j < loops; j++) {
+                cpsi = cos (psi);
+                spsi = sin (psi);
+                phi = 0.0;
+ 
+                for (int i = 0; i < slices; i++) {
+                        int offset = 3 * (j * slices + i);
+                        cphi = cos (phi);
+                        sphi = sin (phi);
+                        *(vertex + offset + 0) = cpsi * (outer + cphi * inner);
+                        *(vertex + offset + 1) = spsi * (outer + cphi * inner);
+                        *(vertex + offset + 2) = sphi * inner;
+                        *(normal + offset + 0) = cpsi * cphi;
+                        *(normal + offset + 1) = spsi * cphi;
+                        *(normal + offset + 2) = sphi;
+                        phi += dphi;
+                }
+ 
+                psi += dpsi;
+        }
+        /* End precalcs */
+	}
+	
+	~Torus(){
+		free(normal);
+		free(vertex);
+	}
+
+	void draw(){
+		 glPushMatrix ();
+
+		 glBegin (GL_QUADS);
+         for (int i = 0; i < slices - 1; i++) {
+                for (int j = 0; j < loops - 1; j++) {
+                        int offset = 3 * (j * slices + i);
+                        glNormal3dv (normal + offset);
+                        glVertex3dv (vertex + offset);
+                        glNormal3dv (normal + offset + 3);
+                        glVertex3dv (vertex + offset + 3);
+                        glNormal3dv (normal + offset + 3 * slices + 3);
+                        glVertex3dv (vertex + offset + 3 * slices + 3);
+                        glNormal3dv (normal + offset + 3 * slices);
+                        glVertex3dv (vertex + offset + 3 * slices);
+                }
+        }
+        glEnd ();
+ 
+        glPopMatrix ();
+	}
+private:
+	float inner, outer;
+	int slices, loops;
+	double *vertex, *normal;
+};
+
+
+
+#endif

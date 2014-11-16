@@ -1,0 +1,79 @@
+#include "OrthoCamera.h"
+
+OrthoCamera::OrthoCamera(std::string id, bool enabled){
+	this->id=id;
+	this->enabled=enabled;
+}
+
+OrthoCamera::~OrthoCamera(){
+}
+
+bool OrthoCamera::setEnabled(bool opt){
+        if (opt) {
+			if (defaultCamera)
+                return false;
+            
+            defaultCamera = true;
+            enabled = true;
+			return true;
+        } else {
+            if (!enabled)
+                return false;
+            
+            defaultCamera = false;
+			enabled = false;
+            return true;
+        }
+}
+
+
+void OrthoCamera::setNear(float v){
+	near=v;
+}
+void OrthoCamera::setFar(float v){
+	far=v;
+}
+
+void OrthoCamera::setDirection(std::string dir){
+	direction=dir;
+}
+void OrthoCamera::setLeft(float v){
+	left=v;
+}
+
+void OrthoCamera::setRight(float v){
+	right=v;
+}
+
+void OrthoCamera::setTop(float v){
+	top=v;
+}
+
+void OrthoCamera::setBottom(float v){
+	bottom=v;
+}
+
+std::string OrthoCamera::getDirection(){
+	return direction;
+}
+
+float OrthoCamera::getNear(){
+	return near;
+}
+float OrthoCamera::getFar(){
+	return far;
+}
+float OrthoCamera::getLeft(){
+	return left;
+}
+
+float OrthoCamera::getRight(){
+	return right;
+}
+
+float OrthoCamera::getTop(){
+	return top;
+}
+float OrthoCamera::getBottom(){
+	return bottom;
+}

@@ -1,0 +1,110 @@
+#ifndef TORUS_H
+#define TORUS_H
+
+#include "CGF\CGFobject.h"
+#include "Primitives.h"
+#define M_PI 3.14159265358979323846264338327950288
+
+class Torus : public CGFobject, public Primitives
+{
+public:
+	Torus(GLenum drawstyle, GLenum normal, float inner, float outer, float slices, float loops) : Primitives(drawstyle, normal){
+		this->inner = inner;
+        this->outer = outer;
+        this->slices = slices;
+        this->loops = loops;
+ 
+        /* Checks */
+        if (this->slices < 1) {
+                this->slices = 1;
+        }
+ 
+        if (this->loops < 1) {
+                this->loops = 1;
+        }
+ 
+        /* Increment the number of sides and rings to allow for one more point than surface */
+        slices++;
+        loops++;
+ 
+        /* Allocate the vertices array */
+        vertex = (double *) calloc (sizeof(double), 3 * slices * loops);
+        _normal = (double *) calloc (sizeof(double), 3 * slices * loops);
+ 
+        /* Precalc */
+        double dpsi, dphi;
+        double spsi, cpsi, sphi, cphi;
+        double phi, psi;
+ 
+        dpsi = 2.0 * M_PI / (double) (loops - 1);
+        dphi = -2.0 * M_PI / (double) (slices - 1);
+ 
+        psi = 0.0;
+ 
+        for (int j = 0; j < loops; j++) {
+                cpsi = cos (psi);
+                spsi = sin (psi);
+                phi = 0.0;
+ 
+                for (int i = 0; i < slices; i++) {
+                        int offset = 3 * (j * slices + i);
+                        cphi = cos (phi);
+                        sphi = sin (phi);
+                        *(vertex + offset + 0) = cpsi * (outer + cphi * inner);
+                        *(vertex + offset + 1) = spsi * (outer + cphi * inner);
+                        *(vertex + offset + 2) = sphi * inner;
+                        *(_normal + offset + 0) = cpsi * cphi;
+                        *(_normal + offset + 1) = spsi * cphi;
+                        *(_normal + offset + 2) = sphi;
+                        phi += dphi;
+                }
+ 
+                psi += dpsi;
+        }
+        /* End precalcs */
+	}
+	
+
+	void draw(){
+		int i, j;
+		GLfloat theta, phi, theta1;
+		GLfloat cosTheta, sinTheta;
+		GLfloat cosTheta1, sinTheta1;
+		GLfloat ringDelta, sideDelta;
+		ringDelta = 2.0 * M_PI / loops;
+		sideDelta = 2.0 * M_PI / slices;
+		theta = 0.0;
+		cosTheta = 1.0;
+		sinTheta = 0.0;
+		for (i = loops - 1; i >= 0; i--) {
+			theta1 = theta + ringDelta;
+			cosTheta1 = cos(theta1);
+			sinTheta1 = sin(theta1);
+			glBegin(GL_QUAD_STRIP);
+				phi = 0.0;
+				for (j = slices; j >= 0; j--) {
+					GLfloat cosPhi, sinPhi, dist;
+						phi += sideDelta;
+						cosPhi = cos(phi);
+						sinPhi = sin(phi);
+						dist = inner + outer * cosPhi;
+						glNormal3f(cosTheta1 * cosPhi, -sinTheta1 * cosPhi, sinPhi);
+						glVertex3f(cosTheta1 * dist, -sinTheta1 * dist, outer * sinPhi);
+						glNormal3f(cosTheta * cosPhi, -sinTheta * cosPhi, sinPhi);
+						glVertex3f(cosTheta * dist, -sinTheta * dist,  outer * sinPhi);
+					}
+			glEnd();
+			theta = theta1;
+			cosTheta = cosTheta1;
+			sinTheta = sinTheta1;
+		}
+}
+private:
+	float inner, outer;
+	int slices, loops;
+	double *vertex, *_normal;
+};
+
+
+
+#endif

@@ -1,0 +1,69 @@
+﻿Build started 17/10/2014 00:13:05.
+     1>Project "C:\Users\João\Dropbox\Development\LAIG\CGFexample\CGFexample.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"..\buildtemp\CGFexample\\" /Fd"..\buildtemp\CGFexample\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt src\DemoScene.cpp src\XMLScene.cpp src\main.cpp
+         DemoScene.cpp
+         Generating Code...
+         Compiling...
+         main.cpp
+         XMLScene.cpp
+     1>c:\users\joão\dropbox\development\laig\cgfexample\src\xmlscene.cpp(69): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\cgfexample\src\xmlscene.cpp(82): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\cgfexample\src\xmlscene.cpp(85): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\cgfexample\src\xmlscene.cpp(88): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\cgfexample\src\xmlscene.cpp(114): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\cgfexample\src\xmlscene.cpp(121): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\cgfexample\src\xmlscene.cpp(139): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\cgfexample\src\xmlscene.cpp(142): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\cgfexample\src\xmlscene.cpp(200): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 11.0\vc\include\stdio.h(311) : see declaration of 'sscanf'
+     1>c:\users\joão\dropbox\development\laig\cgfexample\src\xmlscene.cpp(287): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 11.0\vc\include\stdio.h(311) : see declaration of 'sscanf'
+     1>c:\users\joão\dropbox\development\laig\cgfexample\src\xmlscene.cpp(342): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 11.0\vc\include\stdio.h(311) : see declaration of 'sscanf'
+     1>c:\users\joão\dropbox\development\laig\cgfexample\src\xmlscene.cpp(353): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 11.0\vc\include\stdio.h(311) : see declaration of 'sscanf'
+     1>c:\users\joão\dropbox\development\laig\cgfexample\src\xmlscene.cpp(503): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 11.0\vc\include\stdio.h(311) : see declaration of 'sscanf'
+     1>c:\users\joão\dropbox\development\laig\cgfexample\src\xmlscene.cpp(522): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 11.0\vc\include\stdio.h(311) : see declaration of 'sscanf'
+     1>c:\users\joão\dropbox\development\laig\cgfexample\src\xmlscene.cpp(561): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 11.0\vc\include\stdio.h(311) : see declaration of 'sscanf'
+     1>c:\users\joão\dropbox\development\laig\cgfexample\src\xmlscene.cpp(575): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 11.0\vc\include\stdio.h(311) : see declaration of 'sscanf'
+     1>c:\users\joão\dropbox\development\laig\cgfexample\src\xmlscene.cpp(589): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 11.0\vc\include\stdio.h(311) : see declaration of 'sscanf'
+     1>c:\users\joão\dropbox\development\laig\cgfexample\src\xmlscene.cpp(704): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 11.0\vc\include\stdio.h(311) : see declaration of 'sscanf'
+     1>c:\users\joão\dropbox\development\laig\cgfexample\src\xmlscene.cpp(715): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 11.0\vc\include\stdio.h(311) : see declaration of 'sscanf'
+     1>c:\users\joão\dropbox\development\laig\cgfexample\src\xmlscene.cpp(726): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 11.0\vc\include\stdio.h(311) : see declaration of 'sscanf'
+     1>c:\users\joão\dropbox\development\laig\cgfexample\src\xmlscene.cpp(747): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\joão\dropbox\development\laig\cgfexample\src\xmlscene.cpp(771): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 11.0\vc\include\stdio.h(311) : see declaration of 'sscanf'
+     1>c:\users\joão\dropbox\development\laig\cgfexample\src\xmlscene.cpp(776): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 11.0\vc\include\stdio.h(311) : see declaration of 'sscanf'
+     1>c:\users\joão\dropbox\development\laig\cgfexample\src\xmlscene.cpp(789): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 11.0\vc\include\stdio.h(311) : see declaration of 'sscanf'
+     1>c:\users\joão\dropbox\development\laig\cgfexample\src\xmlscene.cpp(794): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 11.0\vc\include\stdio.h(311) : see declaration of 'sscanf'
+     1>c:\users\joão\dropbox\development\laig\cgfexample\src\xmlscene.cpp(799): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 11.0\vc\include\stdio.h(311) : see declaration of 'sscanf'
+     1>c:\users\joão\dropbox\development\laig\cgfexample\src\xmlscene.cpp(921): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 11.0\vc\include\stdio.h(311) : see declaration of 'sscanf'
+     1>c:\users\joão\dropbox\development\laig\cgfexample\src\xmlscene.cpp(947): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 11.0\vc\include\stdio.h(311) : see declaration of 'sscanf'
+         Generating Code...
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"bin\CGFexample.exe" /INCREMENTAL /NOLOGO glew32.lib CGFlib.lib TinyXML.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /NODEFAULTLIB:LIBCMT.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"bin\CGFexample.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"bin\CGFexample.lib" /MACHINE:X86 ..\buildtemp\CGFexample\OrthoCamera.obj
+         ..\buildtemp\CGFexample\PerspectiveCamera.obj
+         ..\buildtemp\CGFexample\DemoScene.obj
+         ..\buildtemp\CGFexample\main.obj
+         ..\buildtemp\CGFexample\XMLScene.obj
+         CGFexample.vcxproj -> C:\Users\João\Dropbox\Development\LAIG\CGFexample\bin\CGFexample.exe
+     1>Done Building Project "C:\Users\João\Dropbox\Development\LAIG\CGFexample\CGFexample.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:02.72

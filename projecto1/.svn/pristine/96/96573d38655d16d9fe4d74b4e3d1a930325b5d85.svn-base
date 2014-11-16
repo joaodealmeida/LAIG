@@ -1,0 +1,1042 @@
+#include "XMLScene.h"
+
+XMLScene::XMLScene(char *filename)
+{
+
+	// Read XML from file
+
+	doc=new TiXmlDocument( filename );
+	bool loadOkay = doc->LoadFile();
+
+	if ( !loadOkay )
+	{
+		printf( "Could not load file '%s'. Error='%s'. Exiting.\n", filename, doc->ErrorDesc() );
+		exit( 1 );
+	}
+
+	TiXmlElement* anfElement= doc->FirstChildElement( "anf" );
+
+
+	if (anfElement == NULL)
+	{
+		printf("Main anf block element not found! Exiting!\n");
+		
+	}
+	globalsElement = anfElement->FirstChildElement( "globals" );
+	camerasElement = anfElement->FirstChildElement( "cameras" );
+	lightsElement = anfElement->FirstChildElement( "lights" );
+	texturesElement = anfElement->FirstChildElement( "textures" );
+	appearancesElement = anfElement->FirstChildElement( "appearances" );
+	primitivesElement = anfElement->FirstChildElement( "primitives" );
+	graphElement = anfElement->FirstChildElement( "graph" );
+
+
+	parseGlobals(globalsElement);
+
+	//Set params for primitive Quads.
+	if (drawMode.compare("fill") == 0) {
+		drawstyle = GLU_FILL;
+	}else if(drawMode.compare("line") == 0){
+		drawstyle = GLU_LINE;
+	}else
+		drawstyle = GLU_POINT;
+
+	if (shading.compare("flat") == 0) {
+		normalstyle = GL_FLAT;
+	}else
+		normalstyle = GL_SMOOTH;
+	//
+
+	parseCameras(camerasElement);
+	parseLights(lightsElement);
+	parseTextures(texturesElement);
+	parseAppearances(appearancesElement);
+	sceneGraph = parseGraph(graphElement);
+
+	parseReferences();
+
+}
+
+
+void XMLScene::parseReferences(){
+	//set graph rootNode
+
+	Graph *graph = this->sceneGraph;
+	string rootNode = this->sceneGraph->getRootNodeRef();
+	Node *n1 =nullptr;
+
+
+	for(int i=0; i<graph->getGraphNodes().size(); i++){
+		n1=graph->getGraphNodes()[i];
+		if(n1->getNodeId() == graph->getRootNodeRef()){
+			graph->setRootNode(n1);
+			break;
+		}
+	}
+
+
+	//set node descendant
+	n1=nullptr;
+	Node *n2=nullptr;
+	string nodeid;
+	for(int i=0; i<graph->getGraphNodes().size(); i++){
+		n1=graph->getGraphNodes()[i];
+
+		for(int k=0; k<n1->getDescendantsRef().size();k++){
+			nodeid=n1->getDescendantsRef()[k];
+
+			for(int j=0; j<graph->getGraphNodes().size(); j++){
+
+				n2=graph->getGraphNodes()[j];
+				if(n1 == n2) continue;
+				else{
+					if(nodeid == n2->getNodeId()){
+						n1->addDescendants(n2);
+						n2->setParent(n1);
+						break;
+					}
+				}
+			}
+		}
+		if(n1->getDescendantsRef().size() != n1->getDescendants().size()){
+			std::cout << "Descendant not found " << std::endl;
+			exit(1);
+		}
+			
+	}
+
+	//set node appearance
+	Appearance *a1=nullptr;
+	string appid;
+
+	n1=nullptr;
+
+	for(int i=0; i<graph->getGraphNodes().size(); i++){
+		n1=graph->getGraphNodes()[i];
+		appid=n1->getAppearanceRef();
+
+		if(n1->getAppearanceRef() == "inherit")
+			n1->setInheritedApp();
+		else{
+			for(int j=0; j<this->appearancesVec.size(); j++){
+
+				a1=appearancesVec[j];
+				if(a1->getID() == n1->getAppearanceRef())
+					n1->setAppearance(a1);
+			}
+		}
+		if(!n1->getAppearance()){
+			std::cout << "Appearance not found " << std::endl;
+			exit(1);
+		}
+			
+	}
+
+	//set appearance texture
+	Texture * t1;
+	a1=nullptr;
+	
+	for(int i=0;i < appearancesVec.size();i++){
+		a1=appearancesVec[i];
+		if(a1->getTextRef() != ""){
+			for(int j=0;j< texturesVec.size(); j++){
+				t1=texturesVec[j];
+				if(a1->getTextRef() == t1->getID()){
+					a1->setTexture(t1);
+					break;
+				}	
+			}
+			if(!a1->getTexture()){
+				std::cout << "Texture not found " << std::endl;
+				exit(1);
+			}
+		}
+
+	}
+
+
+	
+
+}
+
+void XMLScene::parseGlobals(TiXmlElement *globalsElement){
+	if (globalsElement == NULL)
+		printf("Globals block not found!\n");
+
+	//PARSE GLOBALS
+
+
+		TiXmlElement *gb = globalsElement->FirstChildElement("drawing");
+		if(!strcmp(gb->Value(), "drawing")){
+			//MODE
+
+			const char *mode = gb->Attribute("mode");
+
+			if(mode){
+				if(!strcmp(mode, "fill") || !strcmp(mode, "line") || !strcmp(mode, "point")){
+					this->drawMode=mode; //Store value
+				}
+				std::cout << "Draw mode not recognized" << std::endl;
+			}
+		
+
+
+			//SHADING
+
+			const char *shading = gb->Attribute("shading");
+
+			if(shading){
+				if(!strcmp(shading, "flat") || !strcmp(shading, "gouraud")){
+					this->shading=shading; //Store value
+				}else {
+					std::cout << "Shading mode not recognized" << std::endl;
+				}
+			}
+			//BACKGROUND
+
+			const char *background = gb->Attribute("background");
+			float r,g,b,alpha;
+
+			if(background && sscanf(background,"%f %f %f %f",&r,&g,&b,&alpha) == 4){ // Reads data from valString and stores them
+				if((r<=1.0 && r>= -1.0) && (g<=1.0 && g>= -1.0 )&& (b<=1.0 && b>= -1.0) && (alpha<=1.0 && alpha>= -1.0)){
+					this->drawBackground[0]=r;
+					this->drawBackground[1]=g;
+					this->drawBackground[2]=b;
+					this->drawBackground[3]=alpha;
+					std::cout << "Background Values: R-> " << r << " G-> " << g << " B-> " << b << " Alpha: " << alpha << std::endl;
+				}
+				else{
+				std::cout << "Error parsing background values" << std::endl;
+				}
+			}
+		
+		}
+		gb = globalsElement->FirstChildElement("culling");
+		if(!strcmp(gb->Value(), "culling")){
+			//CULLFACE
+
+			const char *face = gb->Attribute("face");
+
+			if(face){
+				if(!strcmp(face, "none") || !strcmp(face, "back") || !strcmp(face, "front") || !strcmp(face, "both")){
+					this->cullFace=face; //Store value
+				}else{
+				std::cout << "Cullface not recognized" << std::endl;
+				}
+			}
+			
+			//CULLORDER
+
+			const char *order = gb->Attribute("order");
+
+			if(order){
+				if(!strcmp(order, "ccw") || !strcmp(order, "cw")){
+					this->cullOrder=order; //Store value
+				}else{
+				std::cout << "Cullorder not recognized" << std::endl;
+				}
+			}
+		}
+		gb = globalsElement->FirstChildElement("lighting");
+		if(!strcmp(gb->Value(), "lighting")){
+
+			//DOUBLESIDED
+
+			const char *doublesided = gb->Attribute("doublesided");
+			if(doublesided){
+				if(!strcmp(doublesided, "true")){
+					this->lightDoubleSided=true;
+				}else {
+					this->lightDoubleSided=false;
+				}
+			}
+
+			//LOCAL
+
+			const char *local = gb->Attribute("local");
+			if(local){
+				if(!strcmp(local, "true")){
+					this->lightLocal=true;
+				}else if(!strcmp(local, "false")) {
+					this->lightLocal=false;
+				}
+				else{
+					std::cout << "Local not recognized" << std::endl;
+				}
+			}
+
+			//ENABLED
+
+			const char *enabled = gb->Attribute("enabled");
+			if(enabled){
+				if(!strcmp(enabled, "true")){
+					this->lightEnabled=true;
+				}else if(!strcmp(enabled, "false")) {
+					this->lightEnabled=false;
+				}
+				else{
+					std::cout << "Enabled not recognized" << std::endl;
+				}			
+			}
+
+			//AMBIENT
+
+			const char *ambient = gb->Attribute("ambient");
+			float r2,g2,b2,a2;
+
+			if(ambient && sscanf(ambient,"%f %f %f %f",&r2,&g2,&b2,&a2) == 4){ // Reads data from valString and stores them
+				if((r2<=1.0 && r2>= -1.0) && (g2<=1.0 && g2>= -1.0 )&& (b2<=1.0 && b2>= -1.0) && (a2<=1.0 && a2>= -1.0)){
+					this->lightAmbient[0]=r2;
+					this->lightAmbient[1]=g2;
+					this->lightAmbient[2]=b2;
+					this->lightAmbient[3]=a2;
+					std::cout << "Ambient Values: R-> " << r2 << " G-> " << g2 << " B-> " << b2 << " Alpha: " << a2 << std::endl;
+				}
+				else
+				std::cout << "Error parsing ambient values" << std::endl;
+			}
+		}
+}
+
+void XMLScene::parseCameras(TiXmlElement *camerasElement){
+		//PARSE CAMERAS
+
+		if (camerasElement == NULL)
+			printf("Globals block not found!\n");
+
+		if(!camerasElement->Attribute("initial"))
+			std::cout << "Could not load initial camera atribute" << std::endl;
+
+		std::string initialCamera = camerasElement->Attribute("initial");
+		bool hasInitCamera=false;
+
+		for( TiXmlElement* cams = camerasElement->FirstChildElement(); cams!=NULL; cams=cams->NextSiblingElement()){
+
+			std::string id = "";
+
+			if(cams->Attribute("id") !=NULL)
+				id = cams->Attribute("id");
+			
+			//PERSPECTIVE CAMERAS
+
+			if(!strcmp(cams->Value(), "perspective")){
+				PerspectiveCamera * c=NULL;
+				//NEAR
+				if(cams->Attribute("near") == NULL)
+					std::cout << "Could not load near camera attribute" << std::endl;
+				float near = (float)std::stod(cams->Attribute("near"));
+				
+				//FAR
+				if(cams->Attribute("far") == NULL)
+					std::cout << "Could not load far camera attribute" << std::endl;
+				float far = (float)std::stod(cams->Attribute("far"));
+
+				//ANGLE
+				if(cams->Attribute("angle") == NULL)
+					std::cout << "Could not load angle camera attribute" << std::endl;
+				float angle = (float)std::stod(cams->Attribute("angle"));
+
+				//POS
+				float cameraPosition[3], x1,y1,z1;
+
+				if(cams->Attribute("pos")!=NULL && sscanf(cams->Attribute("pos"),"%f %f %f",&x1,&y1,&z1) == 3){
+					cameraPosition[0]=x1;
+					cameraPosition[1]=y1;
+					cameraPosition[2]=z1;
+				}else{
+					std::cout << "Could not load position camera attribute" << std::endl;
+				}
+
+				//TARGET
+				float cameraTarget[3], x2,y2,z2;
+
+				if(cams->Attribute("target")!=NULL && sscanf(cams->Attribute("target"),"%f %f %f",&x2,&y2,&z2) == 3){
+					cameraTarget[0]=x2;
+					cameraTarget[1]=y2;
+					cameraTarget[2]=z2;
+				}else{
+					std::cout << "Could not load target camera attribute" << std::endl;
+				}
+
+				c = new PerspectiveCamera(id, false);
+				c->setNear(near);
+				c->setFar(far);
+				c->setAngle(angle);
+				c->setPosition(cameraPosition);
+				c->setTarget(cameraTarget);
+				if (id == initialCamera) {
+					c->setEnabled(true);
+					hasInitCamera = true;
+				}
+
+				PerscamVec.push_back(c);
+
+
+			} else if (!strcmp(cams->Value(), "ortho")) {
+				{
+					OrthoCamera *c2 = NULL;
+
+					//DIRECTION
+
+					if(cams->Attribute("direction") == NULL)
+						std::cout << "Could not load direction camera attribute" << std::endl;
+
+					if (cams->Attribute("direction")[0] != 'x' && cams->Attribute("direction")[0] != 'y' && cams->Attribute("direction")[0] != 'z')
+						std::cout << "Invalid axis for OrthoCamera" << std::endl;
+
+					std::string dir = cams->Attribute("direction");
+
+					//NEAR
+
+					if(cams->Attribute("near") == NULL)
+						std::cout << "Could not load near camera attribute" << std::endl;
+
+					float near = (float)std::stod(cams->Attribute("near"));
+
+					//FAR
+
+					if(cams->Attribute("far") == NULL)
+						std::cout << "Could not load far camera attribute" << std::endl;
+
+					float far = (float)std::stod(cams->Attribute("far"));
+
+					//LEFT
+
+					if(cams->Attribute("left") == NULL)
+						std::cout << "Could not load left camera attribute" << std::endl;
+
+					float left = (float)std::stod(cams->Attribute("left"));
+
+					//RIGHT
+
+					if(cams->Attribute("right") == NULL)
+						std::cout << "Could not load right camera attribute" << std::endl;
+
+					float right = (float)std::stod(cams->Attribute("right"));
+
+					//TOP
+
+					if(cams->Attribute("top") == NULL)
+						std::cout << "Could not load top camera attribute" << std::endl;
+
+					float top = (float)std::stod(cams->Attribute("top"));
+
+					//BOTTOM
+					
+					if(cams->Attribute("bottom") == NULL)
+						std::cout << "Could not load bottom camera attribute" << std::endl;
+
+					float bottom = (float)std::stod(cams->Attribute("bottom"));
+
+					c2 = new OrthoCamera(id, false);
+					c2->setDirection(dir);
+					c2->setNear(near);
+					c2->setFar(far);
+					c2->setLeft(left);
+					c2->setRight(right);
+					c2->setTop(top);
+					c2->setBottom(bottom);
+
+					if (id == initialCamera) {
+						c2->setEnabled(true);
+						hasInitCamera = true;
+					}
+
+					OrthocamVec.push_back(c2);
+				} 
+
+			}else
+				std::cout << "Invalid camera" << std::endl;
+	}
+	if(!hasInitCamera)
+		std::cout << "Initial camera not found"<< std::endl;
+}
+
+void XMLScene::parseLights(TiXmlElement *lightsElement){
+	int lightid=0;
+	//LIGHTS
+	for (TiXmlElement *light = lightsElement->FirstChildElement("light"); light != NULL; light = light->NextSiblingElement("light")) {
+        
+		int whichLight=0; // Omni -> 1 Spot ->2
+        std::string id = "";
+		OmniLight *l=NULL;
+		SpotLight *l2=NULL;
+        
+        if (light->Attribute("id") != NULL)
+            id = light->Attribute("id");
+        
+        if (light->Attribute("enabled") == NULL)
+            cout << "Could not recognize enable attribute" << std::endl;
+        
+        bool enabled = false;
+
+        //ENABLED
+
+        if (!strcmp(light->Attribute("enabled"), "false"))
+            enabled = false;
+        else if (!strcmp(light->Attribute("enabled"), "true"))
+            enabled = true;
+        else
+            cout << "Could not recognize enable attribute" << std::endl;
+        
+		//MARKER
+
+        if (light->Attribute("marker") == NULL)
+            cout << "Could not recognize marker attribute" << std::endl;
+        
+        bool marker = false;
+        std::string debug = light->Attribute("marker");
+		int i,j;
+		i =strcmp(light->Attribute("marker"), "false");
+		j= strcmp(light->Attribute("marker"), "true");
+        if (strcmp(light->Attribute("marker"), "false"))
+            marker = false;
+        else if (!strcmp(light->Attribute("marker"), "true") == 0)
+            marker = true;
+        else
+            cout << "Could not recognize marker attribute" << std::endl;
+
+		//POS
+        
+        float lightPosition[3], lx1,ly1,lz1;
+
+		if(light->Attribute("pos")!=NULL && sscanf(light->Attribute("pos"),"%f %f %f",&lx1,&ly1,&lz1) == 3){
+			lightPosition[0]=lx1;
+			lightPosition[1]=ly1;
+			lightPosition[2]=lz1;
+		}else{
+			std::cout << "Could not load position light attribute" << std::endl;
+		}
+		
+		if (!strcmp(light->Attribute("type"), "omni")){
+			whichLight=1;
+			l = new OmniLight(GL_LIGHT0+lightid,lightPosition,NULL,id,marker);
+			lightid++;
+		}
+        
+        else if (!strcmp(light->Attribute("type"), "spot")) {
+            whichLight=2;
+			float lightTarget[3], lx2,ly2,lz2;
+			float angle;
+			float exponent;
+            if(light->Attribute("target")!=NULL && sscanf(light->Attribute("target"),"%f %f %f",&lx2,&ly2,&lz2) == 3){
+				lightTarget[0]=lx2;
+				lightTarget[1]=ly2;
+				lightTarget[2]=lz2;
+			}else{
+				std::cout << "Could not load target light attribute" << std::endl;
+			}
+            
+            if(light->Attribute("angle") == NULL)
+				std::cout << "Could not load angle attribute" << std::endl;
+			else{
+				 angle = (float)std::stod(light->Attribute("angle"));
+			}
+
+			if(light->Attribute("exponent") == NULL)
+				std::cout << "Could not load exponent attribute" << std::endl;
+			else{
+				exponent = (float)std::stod(light->Attribute("exponent"));
+			}
+			l2 = new SpotLight(GL_LIGHT0+lightid,lightPosition, NULL, id, marker, lightTarget, angle,exponent);
+			lightid++;
+            
+        } else
+            std::cout << "Invalid light" << std::endl;
+
+		Components *lightComponent=NULL;
+		float a1,a2,a3,a4, lightAmbientComp[4];
+		float s1,s2,s3,s4, lightSpecularComp[4];
+		float d1,d2,d3,d4, lightDiffuseComp[4];
+        
+        for (TiXmlElement *comp = light->FirstChildElement("component"); comp != NULL; comp = comp->NextSiblingElement("component")){
+
+			if (!comp->Attribute("type"))
+				std::cout << "Could not load component attribute" << std::endl;
+
+			//AMBIENT
+
+
+			if (!strcmp(comp->Attribute("type"), "ambient")){
+				if(comp->Attribute("value")!=NULL && sscanf(comp->Attribute("value"),"%f %f %f %f",&a1,&a2,&a3,&a4) == 4){
+					lightAmbientComp[0]=a1;
+					lightAmbientComp[1]=a2;
+					lightAmbientComp[2]=a3;
+					lightAmbientComp[3]=a4;
+				}
+				else{
+					std::cout << "Invalid type of component" << std::endl;
+				}
+
+			//DIFFUSE
+			
+			}else if(!strcmp(comp->Attribute("type"), "diffuse")){
+				
+				if(comp->Attribute("value")!=NULL && sscanf(comp->Attribute("value"),"%f %f %f %f",&d1,&d2,&d3,&d4) == 4){
+					lightDiffuseComp[0]=d1;
+					lightDiffuseComp[1]=d2;
+					lightDiffuseComp[2]=d3;
+					lightDiffuseComp[3]=d4;
+				}
+				else{
+					std::cout << "Invalid type of component" << std::endl;
+				}
+
+			//SPECULAR
+			
+			}else if (!strcmp(comp->Attribute("type"), "specular")){
+				
+				if(comp->Attribute("value")!=NULL && sscanf(comp->Attribute("value"),"%f %f %f %f",&s1,&s2,&s3,&s4) == 4){
+					lightSpecularComp[0]=s1;
+					lightSpecularComp[1]=s2;
+					lightSpecularComp[2]=s3;
+					lightSpecularComp[3]=s4;
+				}
+			}
+			else{
+				std::cout << "Invalid type of component" << std::endl;
+			}
+		}
+
+		lightComponent = new Components(lightAmbientComp,lightDiffuseComp,lightSpecularComp);
+
+			if(whichLight == 1){ 
+				l->setComponent(lightComponent);
+				omniLightVec.push_back(l);
+			}
+
+			if(whichLight == 2){ 
+				l2->setComponent(lightComponent);
+				spotLightVec.push_back(l2);
+			}
+
+    }
+
+}
+
+void XMLScene::parseTextures(TiXmlElement *texturesElement){
+
+		//TEXTURES
+
+	for (TiXmlElement *texture = texturesElement->FirstChildElement("texture"); texture != NULL; texture = texture->NextSiblingElement("texture")) {
+		std::string id="";
+		std::string file="";
+
+		//ID
+		if (texture->Attribute("id") != NULL)
+            id = texture->Attribute("id");
+        
+		//FILE
+
+        if (texture->Attribute("file") == NULL)
+            cout << "Could not recognize enable attribute" << std::endl;
+
+		file = texture->Attribute("file");
+
+		//TEXLENGTH_S
+
+		if(texture->Attribute("texlength_s") == NULL)
+			std::cout << "Could not load textlength_s  attribute" << std::endl;
+		
+		float texlength_s = (float)std::stod(texture->Attribute("texlength_s"));
+
+		//TEXLENGTH_U
+
+		if(texture->Attribute("texlength_u") == NULL)
+			std::cout << "Could not load textleng_u attribute" << std::endl;
+		
+		float texlength_t = (float)std::stod(texture->Attribute("texlength_t"));
+
+		Texture *t= new Texture(file,id,texlength_s,texlength_t);
+		this->texturesVec.push_back(t);
+	}
+
+}
+
+void XMLScene::parseAppearances(TiXmlElement *appearancesElement){
+	//APPEARANCES
+
+		for (TiXmlElement *appearance = appearancesElement->FirstChildElement("appearance"); appearance != NULL; appearance = appearance->NextSiblingElement("appearance")){
+
+			std::string id = "";
+			std::string textureref ="";
+			float shininess;
+
+			//ID
+
+			if (appearance->Attribute("id") != NULL)
+				id = appearance->Attribute("id");
+
+			//SHININESS
+
+			if (appearance->Attribute("shininess") == NULL)
+				std::cout << "Could not load shininess attribute" << std::endl;
+			else{
+				shininess = (float)std::stod(appearance->Attribute("shininess"));
+			}
+			
+
+			//textureref
+
+			if (appearance->Attribute("textureref") != NULL)
+				textureref = appearance->Attribute("textureref");
+			else{
+				std::cout << "no textureref found on XML" << std::endl;
+			}
+
+			//COMPONENTS FOR APPEARANCES
+
+			
+			float a1,a2,a3,a4, appAmbientComp[4];
+			float s1,s2,s3,s4, appSpecularComp[4];
+			float d1,d2,d3,d4, appDiffuseComp[4];
+			Components *appearanceComponent;
+        
+			for (TiXmlElement *comp = appearance->FirstChildElement("component"); comp != NULL; comp = comp->NextSiblingElement("component")){
+
+				if (!comp->Attribute("type"))
+					std::cout << "Could not load component attribute" << std::endl;
+
+				//AMBIENT
+
+
+				if (!strcmp(comp->Attribute("type"), "ambient")){
+					if(comp->Attribute("value")!=NULL && sscanf(comp->Attribute("value"),"%f %f %f %f",&a1,&a2,&a3,&a4) == 4){
+						appAmbientComp[0]=a1;
+						appAmbientComp[1]=a2;
+						appAmbientComp[2]=a3;
+						appAmbientComp[3]=a4;
+					}
+
+				//DIFFUSE
+			
+				}else if(!strcmp(comp->Attribute("type"), "diffuse")){
+				
+					if(comp->Attribute("value")!=NULL && sscanf(comp->Attribute("value"),"%f %f %f %f",&d1,&d2,&d3,&d4) == 4){
+						appDiffuseComp[0]=d1;
+						appDiffuseComp[1]=d2;
+						appDiffuseComp[2]=d3;
+						appDiffuseComp[3]=d4;
+					}
+
+				//SPECULAR
+			
+				}else if (!strcmp(comp->Attribute("type"), "specular")){
+				
+					if(comp->Attribute("value")!=NULL && sscanf(comp->Attribute("value"),"%f %f %f %f",&s1,&s2,&s3,&s4) == 4){
+						appSpecularComp[0]=s1;
+						appSpecularComp[1]=s2;
+						appSpecularComp[2]=s3;
+						appSpecularComp[3]=s4;
+					}
+				}
+				else{
+					std::cout << "Invalid type of component" << std::endl;
+				}
+			}
+
+			appearanceComponent = new Components(appAmbientComp,appDiffuseComp,appSpecularComp);
+
+			Appearance *app1 = new Appearance(id, appearanceComponent, shininess);
+			app1->setAmbient(appAmbientComp);
+			app1->setDiffuse(appDiffuseComp);
+			app1->setSpecular(appSpecularComp);
+			if(!textureref.empty() ){
+				Texture *ptr;
+
+				for(int i=0; i< texturesVec.size();i++){
+					if(texturesVec[i]->getID() == textureref)
+						ptr=texturesVec[i];
+				}
+
+				app1->setTexture(ptr);
+
+			}
+
+			appearancesVec.push_back(app1);
+		}
+}
+
+std::vector<Primitives *> XMLScene::parsePrimitives(TiXmlElement *primitivesElement){
+	 std::vector<Primitives *> returnVec;
+
+	 for (TiXmlElement *primitive = primitivesElement->FirstChildElement(); primitive != NULL; primitive = primitive->NextSiblingElement()) {
+        Primitives *prim = nullptr;
+        
+		//RECTANGLE
+        if (!strcmp(primitive->Value(), "rectangle")) {
+            
+			float x1,y1,x2,y2;
+
+			if(primitive->Attribute("xy1")!=NULL && sscanf(primitive->Attribute("xy1"),"%f %f",&x1,&y1) == 2){
+			}else{
+				std::cout << "Could not load primitive attributes" << std::endl;
+			}
+
+			if(primitive->Attribute("xy2")!=NULL && sscanf(primitive->Attribute("xy2"),"%f %f",&x2,&y2) == 2){
+			}else{
+				std::cout << "Could not load primitive attributes" << std::endl;
+			}
+			
+			prim = new Rectangle(drawstyle, normalstyle, x1, y1, x2, y2);
+		
+         
+		//TRIANGLE
+        } else if (!strcmp(primitive->Value(), "triangle")) {
+
+			float x1,y1,z1,x2,y2,z2,x3,y3,z3;
+
+			if(primitive->Attribute("xyz1")!=NULL && sscanf(primitive->Attribute("xyz1"),"%f %f %f",&x1,&y1, &z1) == 3){
+			}else{
+				std::cout << "Could not load primitive attributes" << std::endl;
+			}
+
+			if(primitive->Attribute("xyz2")!=NULL && sscanf(primitive->Attribute("xyz2"),"%f %f",&x2,&y2,&z2) == 3){
+			}else{
+				std::cout << "Could not load primitive attributes" << std::endl;
+			}
+
+			if(primitive->Attribute("xyz3")!=NULL && sscanf(primitive->Attribute("xyz2"),"%f %f",&x3,&y3,&z3) == 3){
+			}else{
+				std::cout << "Could not load primitive attributes" << std::endl;
+			}
+
+			prim = new Triangle(drawstyle, normalstyle, x1, y1, z1, x2, y2, z2, x3, y3, z3);
+            
+      
+        //CYLINDER
+        } else if (!strcmp(primitive->Value(), "cylinder")) {
+
+			float base,top,height;
+			int slices,stacks;
+
+			if (primitive->Attribute("base") == NULL)
+				std::cout << "Could not load primitive attributes" << std::endl;
+			else{
+				base = (float)std::stod(primitive->Attribute("base"));
+			}
+
+			if (primitive->Attribute("top") == NULL)
+				std::cout << "Could not primitive attributes" << std::endl;
+			else{
+				top = (float)std::stod(primitive->Attribute("base"));
+			}
+
+			if (primitive->Attribute("height") == NULL)
+				std::cout << "Could not load primitive attributes" << std::endl;
+			else{
+				height = (float)std::stod(primitive->Attribute("height"));
+			}
+
+			if (primitive->Attribute("slices") == NULL)
+				std::cout << "Could not load primitive attributes" << std::endl;
+			else{
+				slices = (int)std::stof(primitive->Attribute("slices"));
+			}
+
+			if (primitive->Attribute("stacks") == NULL)
+				std::cout << "Could not load primitive attributes" << std::endl;
+			else{
+				stacks = (int)std::stof(primitive->Attribute("stacks"));
+			}
+
+            prim = new Cylinder(drawstyle, normalstyle, base, top, height, slices, stacks);
+                
+        } else if (!strcmp(primitive->Value(), "sphere")) {
+            
+			float radius;
+			int slices,stacks;
+
+            if (primitive->Attribute("radius") == NULL)
+				std::cout << "Could not load primitive attributes" << std::endl;
+			else{
+				radius = (float)std::stod(primitive->Attribute("radius"));
+			}
+
+			if (primitive->Attribute("slices") == NULL)
+				std::cout << "Could not load primitive attributes" << std::endl;
+			else{
+				slices = (int)std::stof(primitive->Attribute("slices"));
+			}
+
+			if (primitive->Attribute("stacks") == NULL)
+				std::cout << "Could not load primitive attributes" << std::endl;
+			else{
+				stacks = (int)std::stof(primitive->Attribute("stacks"));
+			}
+            
+            prim = new Sphere(drawstyle, normalstyle, radius, slices, stacks);
+            
+        } else if (!strcmp(primitive->Value(), "torus")) {
+            
+			float inner,outer;
+			int slices,loops;
+
+            if (primitive->Attribute("inner") == NULL)
+				std::cout << "Could not load primitive attributes" << std::endl;
+			else{
+				inner = (float)std::stod(primitive->Attribute("inner"));
+			}
+
+			if (primitive->Attribute("outer") == NULL)
+				std::cout << "Could not load primitive attributes" << std::endl;
+			else{
+				outer = (float)std::stod(primitive->Attribute("outer"));
+			}
+
+			if (primitive->Attribute("slices") == NULL)
+				std::cout << "Could not load primitive attributes" << std::endl;
+			else{
+				slices = (int)std::stof(primitive->Attribute("slices"));
+			}
+
+			if (primitive->Attribute("loops") == NULL)
+				std::cout << "Could not load primitive attributes" << std::endl;
+			else{
+				loops = (int)std::stof(primitive->Attribute("loops"));
+			}
+            
+            prim = new Torus(normalstyle, drawstyle, inner, outer, slices, loops);
+            
+        } else
+            std::cout << "Invalid primitive" << std::endl;
+        
+        returnVec.push_back(prim);
+    }	
+    
+    return returnVec;
+}
+
+std::vector<Transforms *> XMLScene::parseTransforms(TiXmlElement *transformsElement){
+	std::vector<Transforms *> returnVec;
+
+	for (TiXmlElement *transform = transformsElement->FirstChildElement("transform"); transform != NULL; transform = transform->NextSiblingElement("transform")) {
+        Transforms *t1 = nullptr;
+		float tox,toy,toz, angle, fx, fy, fz;
+		string axis;
+        
+		//TRANSLATE
+        if (!strcmp(transform->Attribute("type"), "translate")) {
+            
+            if(transform->Attribute("to")!=NULL && sscanf(transform->Attribute("to"),"%f %f %f",&tox,&toy,&toz) == 3){
+			}else{
+				std::cout << "Could not load transform attributes" << std::endl;
+			}
+
+			float dest[3] = {tox,toy,toz};
+			t1 = new Translate(dest);
+            
+		//ROTATE
+        } else if (!strcmp(transform->Attribute("type"), "rotate")) {
+
+			if (transform->Attribute("axis") != NULL)
+				axis = transform->Attribute("axis");
+
+
+			if (transform->Attribute("angle") == NULL)
+				std::cout << "Could not load transform attribute" << std::endl;
+			else{
+				angle = (float)std::stod(transform->Attribute("angle"));
+			}
+
+			t1 = new Rotate(axis,angle);
+
+		//SCALE
+        } else if (!strcmp(transform->Attribute("type"), "scale")) {
+            
+			if(transform->Attribute("factor")!=NULL && sscanf(transform->Attribute("factor"),"%f %f %f",&fx,&fy,&fz) == 3){
+			}else{
+				std::cout << "Could not load transform attributes" << std::endl;
+			}
+			float factor[3]={fx,fy,fz};
+
+			t1 = new Scale(factor);
+
+        } else std::cout << "Invalide primitive type" << std::endl;
+        
+        returnVec.push_back(t1);
+    }
+
+	return returnVec;
+}
+
+Node * XMLScene::parseNodes(TiXmlElement *nodesElement){
+	Node *n1 = nullptr;
+	std::string id="";
+	std::string appearance_ref;
+	std::vector<Node *> returnVec;
+
+	if (nodesElement->Attribute("id") != NULL){
+		id = nodesElement->Attribute("id");
+		n1 = new Node(id);
+	}
+	
+	for (TiXmlElement *node = nodesElement->FirstChildElement(); node != NULL; node = node->NextSiblingElement()){
+		 if (!strcmp(node->Value(), "transforms")){
+            for (Transforms *t : parseTransforms(node))
+                n1->addTransform(t);
+		 
+		 }else if (!strcmp(node->Value(), "appearanceref")){
+			 appearance_ref = node->Attribute("id");
+			 n1->setAppearanceRef(appearance_ref);
+		 
+		 }else if (!strcmp(node->Value(), "primitives")){
+			 for (Primitives *p : parsePrimitives(node))
+				 n1->addPrimitive(p);
+
+		 }else if (!strcmp(node->Value(), "descendants")){
+			 
+			 for (TiXmlElement *descendant = node->FirstChildElement("noderef"); descendant != NULL; descendant = descendant->NextSiblingElement("noderef")) {
+                std::string idnode="";
+
+				if (descendant->Attribute("id")){
+					//idnode = descendant->Attribute("id");
+					n1->addDescendantsRef(descendant->Attribute("id"));
+				}
+			 }
+
+		 }else std::cout << "Invalid node struture" << std::endl;
+
+	 }
+
+	return n1;
+}
+
+Graph * XMLScene::parseGraph(TiXmlElement *graphElement){
+	Graph *g = new Graph();
+	std::string rootid="";
+	
+	if (graphElement->Attribute("rootid") != NULL){
+		rootid = graphElement->Attribute("rootid");
+		g->setRootRef(rootid);
+	}
+
+	for (TiXmlElement *node = graphElement->FirstChildElement("node"); node != NULL; node = node->NextSiblingElement("node"))
+		g->addNode(parseNodes(node));
+		
+
+	return g;
+}
+
+XMLScene::~XMLScene()
+{
+	delete(doc);
+}
+
+//-------------------------------------------------------
+
+TiXmlElement *XMLScene::findChildByAttribute(TiXmlElement *parent,const char * attr, const char *val)
+// Searches within descendants of a parent for a node that has an attribute _attr_ (e.g. an id) with the value _val_
+// A more elaborate version of this would rely on XPath expressions
+{
+	TiXmlElement *child=parent->FirstChildElement();
+	int found=0;
+
+	while (child && !found)
+		if (child->Attribute(attr) && strcmp(child->Attribute(attr),val)==0)
+			found=1;
+		else
+			child=child->NextSiblingElement();
+
+	return child;
+}
