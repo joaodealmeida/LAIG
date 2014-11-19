@@ -6,6 +6,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <math.h>
 #include "PerspectiveCamera.h"
 #include "OrthoCamera.h"
 #include "OmniLight.h"
@@ -20,8 +21,14 @@
 #include "Sphere.h"
 #include "Torus.h"
 #include "Plane.h"
+#include "Patch.h"
+#include "Vehicle.h"
+#include "Flag.h"
 #include "Node.h"
 #include "Graph.h"
+#include "Animation.h"
+#include "LinearAnimation.h"
+#include "CircularAnimation.h"
 
 class XMLScene
 {
@@ -35,9 +42,12 @@ public:
 	void parseLights(TiXmlElement *lightsElement);
 	void parseTextures(TiXmlElement *texturesElement);
 	void parseAppearances(TiXmlElement *appearancesElement);
+	void parseAnimations(TiXmlElement *animationsElement);
+	
 
 	std::vector<Primitives *> parsePrimitives(TiXmlElement *primitivesElement);
 	std::vector<Transforms *> parseTransforms(TiXmlElement *transformesElement);
+
 	Node* parseNodes(TiXmlElement *nodesElement);
 	Graph* parseGraph(TiXmlElement *graphElement);
 
@@ -57,6 +67,7 @@ public:
 	TiXmlElement* texturesElement;
 	TiXmlElement* appearancesElement;
 	TiXmlElement* primitivesElement;
+	TiXmlElement* animationsElement;
 
 
 	//Globals Data
@@ -81,6 +92,8 @@ public:
 	//Appearances
 	std::vector<Appearance *> appearancesVec;
 
+	//Animations
+	std::vector<Animation *> animationsVec;
 
 	//Graph
 	Graph* sceneGraph;

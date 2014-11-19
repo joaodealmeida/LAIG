@@ -16,11 +16,11 @@ private:
 	int order, partsU, partsV;
 	std::string compute;
 
-	void calcTextPoints(int order);
+	//void calcTextPoints(int order);
 
 	GLfloat *controlPoints;
 	static const GLfloat normalComponent[4][3];
-	GLfloat *texturePoints;
+	//GLfloat *texturePoints;
 	//static const GLfloat colorPoints[4][4];
 	
 	

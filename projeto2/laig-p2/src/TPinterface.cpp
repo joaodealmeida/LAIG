@@ -63,6 +63,14 @@ void TPinterface::initGUI(){
         
         id++;
     }
+
+	id=200;
+
+	addColumn();
+	GLUI_Panel *shadersPanel = addPanel(const_cast<char *>(std::string("Shader").c_str()), 1);
+	GLUI_Spinner *spin = addSpinnerToPanel(shadersPanel,const_cast<char *>(std::string("Wind").c_str()),2,NULL,id);
+	spin->set_int_limits(0,15);
+	spin->set_int_val(0);
 }
 
 void TPinterface::processGUI(GLUI_Control *ctrl)
@@ -121,7 +129,7 @@ void TPinterface::processGUI(GLUI_Control *ctrl)
 			else
 				l1->enable();
 		}
-	} else {
+	} else if( ctrl->user_id < 200) {
         
         int camPos = (int)(ctrl->user_id - 100);
 		int ortholimit,perslimit;
@@ -145,6 +153,14 @@ void TPinterface::processGUI(GLUI_Control *ctrl)
 		if(camPos >  ortholimit-1)
 			scene->getParserResults()->PerscamVec[camPos-ortholimit]->setEnabled(true);
 
-    }
+    } else if( ctrl->user_id == 200){
+		for(int i=0; i<scene->getParserResults()->sceneGraph->getGraphNodes().size(); i++){
+				Node * n =  scene->getParserResults()->sceneGraph->getGraphNodes()[i];
+				for(int j=0; j<n->getPrimitives().size(); j++){
+					n->getPrimitives()[j]->setWind(ctrl->int_val);
+				}
+					
+			}
+	}
 }
 

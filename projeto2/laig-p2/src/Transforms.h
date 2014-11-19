@@ -83,6 +83,9 @@ public:
 		glScalef(destination[0],destination[1],destination[2]);
 		glGetFloatv(GL_MODELVIEW_MATRIX,&transformMatrix[0][0]);
 	}
+	void apply(){
+		glScalef(destination[0],destination[1],destination[2]);
+	}
 
 	~Scale();
 

@@ -19,6 +19,7 @@ public:
 	virtual void setDrawStyle(GLenum newstyle){
 		gluQuadricDrawStyle(quad,newstyle);
 	}
+	virtual void setWind(int w){}
 
 protected:
 	GLUquadric *quad;

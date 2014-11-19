@@ -34,7 +34,17 @@ const GLfloat Plane::texturePoints[4][2] = { { 0.0, 0.0 },
 Plane::Plane(GLenum drawstyle, GLenum normal, int parts) : Primitives(drawstyle, normal)
 {
 	this->parts = parts;
-	glColor3f(1.0, 1.0, 1.0);
+}
+
+Plane::~Plane()
+{
+	//delete(myTexture);
+}
+
+void Plane::draw(void)
+{
+	//glRotatef(180,0,0,1);
+	//glColor3f(1.0, 1.0, 1.0);
 	glMap2f(GL_MAP2_VERTEX_3, 0.0, 1.0, 3, 2, 0.0, 1.0, 6, 2, &controlPoints[0][0]);
 	glMap2f(GL_MAP2_NORMAL, 0.0, 1.0, 3, 2, 0.0, 1.0, 6, 2, &normalComponent[0][0]);
 	//glMap2f(GL_MAP2_COLOR_4, 0.0, 1.0, 4, 2, 0.0, 1.0, 8, 2, &colorPoints[0][0]);
@@ -43,7 +53,7 @@ Plane::Plane(GLenum drawstyle, GLenum normal, int parts) : Primitives(drawstyle,
 	// os interpoladores activam-se:
 	glEnable(GL_MAP2_VERTEX_3);
 	glEnable(GL_MAP2_NORMAL);
-	//glEnable(GL_MAP2_COLOR_4);
+	glEnable(GL_MAP2_COLOR_4);
 	glEnable(GL_MAP2_TEXTURE_COORD_2);
 
 	// para este conjunto de interpoladores:
@@ -54,16 +64,6 @@ Plane::Plane(GLenum drawstyle, GLenum normal, int parts) : Primitives(drawstyle,
 	glMapGrid2f(this->parts, 0.0, 1.0, this->parts, 0.0, 1.0);
 
 	//myTexture = new CGFtexture("../data/evaltext.jpg");
-}
-
-Plane::~Plane()
-{
-	//delete(myTexture);
-}
-
-void Plane::draw(void)
-{
-
 	// INICIALIZACOES RELACIONADAS COM OS "EVALUATORS"
 
 	// declaram-se quatro interpoladores, de coordenadas, de
@@ -86,14 +86,14 @@ void Plane::draw(void)
 
 
 	// SEGUE-SE EXEMPLO DE UTILIZACAO DE "EVALUATORS"
-	glShadeModel(GL_FLAT);					// GL_FLAT, GL_SMOOTH
+	//glShadeModel(GL_SMOOTH);					// GL_FLAT, GL_SMOOTH
 	/*glEnable(GL_LIGHTING);
 	glEnable(GL_COLOR_MATERIAL);
 	glEnable(GL_TEXTURE_2D);
 	myTexture->apply();*/
 
 
-	glEvalMesh2(GL_FILL, 0, 10, 0, 15);		// GL_POINT, GL_LINE, GL_FILL
+	glEvalMesh2(GL_FILL, 0, this->parts, 0, this->parts);		// GL_POINT, GL_LINE, GL_FILL
 	//glEvalMesh2(GL_FILL, 10,30, 20,40);	// poligono incompleto...
 	//glEvalMesh2(GL_FILL, -10,50, -20,70);	// ...ou "transbordante"
 	// NOTA: os 4 ultimos parametros da funcao glEvalMesh2() nao sao 
@@ -105,14 +105,14 @@ void Plane::draw(void)
 
 
 	//glColor3f(1.0, 1.0, 0.0);
-	for (int i = 0; i < 4; i++)
+	/*for (int i = 0; i < 4; i++)
 	{
 		glRasterPos3f(controlPoints[i][0], controlPoints[i][1], controlPoints[i][2] + 0.5);
 		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, '0' + i);
 	}
-
-	glDisable(GL_TEXTURE_2D);
-	//glDisable(GL_COLOR_MATERIAL);
+	*/
+	
+	glDisable(GL_AUTO_NORMAL);
 
 
 }

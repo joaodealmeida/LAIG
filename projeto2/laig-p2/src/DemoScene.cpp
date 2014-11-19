@@ -27,8 +27,24 @@ void DemoScene::init()
 	
 	applyLights();
 	applyGlobals();
+	
+	//GLfloat *controlPoints = new GLfloat[9*3];
+	//controlPoints[3 + 0] = 0.5;
+	//controlPoints[3 + 1] = 0;
+	//controlPoints[3 + 2] = -0.5;
+	//controlPoints[6 + 0] = 0.5;
+	//controlPoints[6 + 1] = 0;
+	//controlPoints[6 + 2] = 0.5;
+	//controlPoints[9 + 0] =-0.5;
+	//controlPoints[9 + 1] = 0;
+	//controlPoints[9 + 2] = -0.5;
+	//controlPoints[12 + 0] =-0.5;
+	//controlPoints[12 + 1] = 0;
+	//controlPoints[12 + 2] = 0.5;
+
 
 	obj = new Plane(GL_FILL,GL_SMOOTH,10);
+	//obj = new Patch(GL_FILL,GL_SMOOTH ,1 , 10, 10, "fill",controlPoints);
 
 
 
@@ -96,9 +112,9 @@ void DemoScene::init()
 	//obj2=new Torus(GL_FILL, GL_FLAT,10,3,10,10);
 	//obj3=new Triangle(GL_FILL,GL_FLAT,-1,1,1,1,1,1,0,2.5,0);
 	//obj4=new Rectangle(GL_FILL,GL_FLAT,0,0,20,20);
-	materialAppearance=new CGFappearance();
-	//textureAppearance=new CGFappearance("../data/pyramid.jpg",GL_REPEAT, GL_REPEAT);
-	shader=new CGFshader("../data/texshader.vert","../data/texshader.frag");
+	//materialAppearance=new CGFappearance();
+	textureAppearance=new CGFappearance("textures\\winterwall.png",GL_REPEAT, GL_REPEAT);
+	//shader=new CGFshader("../data/texshader.vert","../data/texshader.frag");
 
 	setUpdatePeriod(30);
 }
@@ -203,9 +219,15 @@ void DemoScene::drawScene(Node *node){
 }
 void DemoScene::update(unsigned long t)
 {
-	shader->bind();
-	shader->update(t/400.0);
-	shader->unbind();
+	Animation *a1=nullptr;
+	/*for (int i = 0; i < x1->animationsVec.size(); i++){
+		a1=x1->animationsVec[i];
+		a1->update(t);
+	}*/
+	for(int i = 0; i < x1->sceneGraph->getGraphNodes().size(); i++)
+		 x1->sceneGraph->getGraphNodes()[i]->startAnimation(t);
+		
+
 	
 }
 	
@@ -253,7 +275,42 @@ void DemoScene::display()
 	//materialAppearance->apply();
 	drawScene(x1->sceneGraph->getRootNode());
 	//materialAppearance->apply();
-	//obj->draw();
+	//HARDCODED WALLS, since scaled buged
+	Texture *t = new Texture("textures\\winterwall.png","texturaparede",1,1);
+	glPushMatrix();
+		textureAppearance->apply();
+		glTranslatef(10,10,0);
+		glRotatef(180,0,1,0);
+		glRotatef(-90,1,0,0);
+		glScalef(20,1,20);
+		obj->draw();
+	glPopMatrix();
+
+	glPushMatrix();
+		textureAppearance->apply();
+		glTranslatef(20,10,10);
+		glRotatef(90,0,1,0);
+		glRotatef(-90,1,0,0);
+		glScalef(20,1,20);
+		obj->draw();
+	glPopMatrix();
+
+	glPushMatrix();
+		textureAppearance->apply();
+		glTranslatef(0,10,10);
+		glRotatef(-90,0,1,0);
+		glRotatef(-90,1,0,0);
+		glScalef(20,1,20);
+		obj->draw();
+	glPopMatrix();
+
+	glPushMatrix();
+		textureAppearance->apply();
+		glTranslatef(10,10,20);
+		glRotatef(-90,1,0,0);
+		glScalef(20,1,20);
+		obj->draw();
+	glPopMatrix();
 
 	for(int i=0; i< x1->omniLightVec.size(); i++){
 		OmniLight * l = x1->omniLightVec[i];

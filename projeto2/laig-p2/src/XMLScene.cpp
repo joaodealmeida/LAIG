@@ -28,6 +28,7 @@ XMLScene::XMLScene(char *filename)
 	texturesElement = anfElement->FirstChildElement( "textures" );
 	appearancesElement = anfElement->FirstChildElement( "appearances" );
 	primitivesElement = anfElement->FirstChildElement( "primitives" );
+	animationsElement = anfElement->FirstChildElement("animations");
 	graphElement = anfElement->FirstChildElement( "graph" );
 
 
@@ -51,6 +52,7 @@ XMLScene::XMLScene(char *filename)
 	parseLights(lightsElement);
 	parseTextures(texturesElement);
 	parseAppearances(appearancesElement);
+	parseAnimations(animationsElement);
 	sceneGraph = parseGraph(graphElement);
 
 	parseReferences();
@@ -105,6 +107,12 @@ void XMLScene::visitNode(Node *root, bool applyLocalTransformation) {
 
 	if (applyLocalTransformation) {
 		glMultMatrixf(root->getTransformationMatrix());
+		if (!root->getAnimations().empty())
+			for (int i = 0; i < root->getAnimations().size(); i++)
+				if(root->getAnimations()[i]->getWaiting()){
+				root->getAnimations()[i]->apply();
+				break;
+				}
 	}
 
 	if (root->getHasDisplayList() && root->isCalculated()){
@@ -262,6 +270,37 @@ void XMLScene::parseReferences(){
 			exit(1);
 		}
 			
+	}
+	//set node animations
+	n1=nullptr;
+	vector <std::string > nodeAnimRef;
+	string animid;
+	Animation *anim1;
+
+
+	for(int i=0; i<graph->getGraphNodes().size(); i++){
+		n1=graph->getGraphNodes()[i];
+		nodeAnimRef=n1->getAnimationsRef();
+		if (!nodeAnimRef.empty())
+			if (!n1->getHasDisplayList())
+				for (int j = 0; j < nodeAnimRef.size(); j++){
+					animid = nodeAnimRef[j];
+					for (int k = 0; k < animationsVec.size(); k++){
+						anim1 = animationsVec[k];
+						if (animid == anim1->getID())
+							/*if(j==0){
+								n1->addAnimation(anim1);
+								anim1->setWaiting(false);
+							}else*/
+								n1->addAnimation(anim1);
+						}
+				}
+				else{
+			std::cout << "Impossivel carregar animacao, no tem displaylist" << std::endl;
+			exit(1);
+				} 
+		else
+			continue;
 	}
 
 	//set appearance texture
@@ -893,6 +932,7 @@ void XMLScene::parseAppearances(TiXmlElement *appearancesElement){
 		}
 }
 
+
 std::vector<Primitives *> XMLScene::parsePrimitives(TiXmlElement *primitivesElement){
 	 std::vector<Primitives *> returnVec;
 
@@ -1036,6 +1076,7 @@ std::vector<Primitives *> XMLScene::parsePrimitives(TiXmlElement *primitivesElem
             
             prim = new Torus(normalstyle, drawstyle, inner, outer, slices, loops);
             
+		//PLANE
 		} else if (!strcmp(primitive->Value(), "plane")) {
 
 			int parts;
@@ -1048,9 +1089,96 @@ std::vector<Primitives *> XMLScene::parsePrimitives(TiXmlElement *primitivesElem
 
 			prim = new Plane(normalstyle, drawstyle, parts);
 
-		}
-		else
-            std::cout << "Invalid primitive" << std::endl;
+		//PATCH
+		} else if(!strcmp(primitive->Value(), "patch")){
+				int order;
+				int partsU;
+				int partsV;
+				std::string  compute = "";
+
+				//ORDER
+
+				if (primitive->Attribute("order") == NULL)
+					std::cout << "Could not load primitive attributes" << std::endl;
+				else{
+					order = (int)std::stof(primitive->Attribute("order"));
+				}
+
+				//PARTSU
+
+				if (primitive->Attribute("partsU") == NULL)
+					std::cout << "Could not load primitive attributes" << std::endl;
+				else{
+					partsU = (int)std::stof(primitive->Attribute("partsU"));
+				}
+
+
+				//PARTSV
+
+				if (primitive->Attribute("partsV") == NULL)
+					std::cout << "Could not load primitive attributes" << std::endl;
+				else{
+					partsV = (int)std::stof(primitive->Attribute("partsV"));
+				}
+
+				//COMPUTE
+
+				if (primitive->Attribute("compute") == NULL)
+					std::cout << "Could not load primitive attributes" << std::endl;
+				else{
+					compute = primitive->Attribute("compute");
+				}
+
+				//CONTROLPOINT FOR PATCH
+
+				int size = (order + 1)*(order + 1);
+				GLfloat *tempPoints = new GLfloat[size*3];
+				TiXmlElement* controlpoint = primitive->FirstChildElement("controlpoint");
+
+				for(int i = 0; i < size; i++) {
+
+					if(!controlpoint)
+						std::cout << "Control point not found, cant proceed" << std::endl;
+
+					tempPoints[i*3 + 0] = (float)std::stod(controlpoint->Attribute("x"));
+					tempPoints[i*3 + 1] = (float)std::stod(controlpoint->Attribute("y"));
+					tempPoints[i*3 + 2] = (float)std::stod(controlpoint->Attribute("z"));
+					
+					controlpoint = controlpoint->NextSiblingElement("controlpoint");
+				}
+				/*GLfloat *controlPoints = new GLfloat[size*3];
+
+				for(int i = 0; i < size; i++) {
+					int tmp = (i%3);
+					tmp *= ((order+1)*(order+1));								
+					tmp += floor((float)(i/3)) *3;
+
+					controlPoints[i*3 + 0] = tempPoints[tmp + 0]; 
+					controlPoints[i*3 + 1] = tempPoints[tmp + 1]; 
+					controlPoints[i*3 + 2] = tempPoints[tmp + 2]; 
+				}*/
+
+				//-> CCW
+				prim = new Patch(drawstyle,normalstyle,order, partsU, partsV, compute, tempPoints);
+				
+				for(int i=0; i< 12; i++)
+				printf("Point2[%d]: %f\n", i, tempPoints[i]);
+
+				std::cout << "Criou Patch \n";
+				//otherwise
+				//prim = new Patch(drawstyle,normalstyle,order, partsU, partsV, compute, tempPoints);
+
+		}  else if((!strcmp(primitive->Value(), "flag"))){
+			std::string texture;
+
+			if (primitive->Attribute("texture") == NULL)
+					std::cout << "Texture attribute not found" << std::endl;
+				else{
+					texture = primitive->Attribute("texture");
+				}
+				
+				prim = new Flag(drawstyle,normalstyle,new Texture(texture,texture,1,1));
+		} else  std::cout << "Invalid primitive" << std::endl;
         
 		returnVec.push_back(prim);
     }	
@@ -1103,12 +1231,88 @@ std::vector<Transforms *> XMLScene::parseTransforms(TiXmlElement *transformsElem
 
 			t1 = new Scale(factor);
 
-        } else std::cout << "Invalide primitive type" << std::endl;
+        } else std::cout << "Invalid transform type" << std::endl;
         
         returnVec.push_back(t1);
     }
 
 	return returnVec;
+}
+
+void XMLScene::parseAnimations(TiXmlElement *animationsElement) {
+    
+    for (TiXmlElement *animation = animationsElement->FirstChildElement("animation"); animation != NULL; animation = animation->NextSiblingElement("animation")) {
+        std::string id = "",type;
+		float span;
+        
+        if (animation->Attribute("id") != NULL)
+            id = animation->Attribute("id");
+        
+        if (animation->Attribute("span") == NULL)
+				std::cout << "Could not load animation attributes" << std::endl;
+		else{
+				span = (float)std::stod(animation->Attribute("span"));
+			}
+        
+        if(animation->Attribute("type") == NULL)
+				std::cout << "Could not load animation attributes" << std::endl;
+		else{
+				type = animation->Attribute("type");
+			}
+
+        
+        if (!strcmp(animation->Attribute("type"), "linear")) {
+            
+            LinearAnimation *l1;
+			std::vector<float> controlX,controlY,controlZ;
+            
+            for (TiXmlElement *controlP = animation->FirstChildElement("controlpoint"); controlP != NULL; controlP = controlP->NextSiblingElement("controlpoint")){
+				controlX.push_back( (float)std::stod(controlP->Attribute("xx")));
+				controlY.push_back( (float)std::stod(controlP->Attribute("yy")));
+				controlZ.push_back( (float)std::stod(controlP->Attribute("zz")));
+			}
+			l1 = new LinearAnimation(false,id,controlX,controlY,controlZ,span);
+			l1->setWaiting(true);
+			this->animationsVec.push_back(l1);
+			
+            
+        } else if (!strcmp(animation->Attribute("type"), "circular")) {
+            float x,y,z,center[3],radius,startang,rotang;
+			CircularAnimation *c1;
+
+			if(animation->Attribute("center")!=NULL && sscanf(animation->Attribute("center"),"%f %f %f",&x,&y,&z) == 3){
+				center[0]=x;
+				center[1]=y;
+				center[2]=z;
+			}else{
+				std::cout << "Could not load primitive attributes" << std::endl;
+			}
+           
+			if (animation->Attribute("radius") == NULL)
+				std::cout << "Could not load animation attributes" << std::endl;
+			else{
+				radius = (float)std::stod(animation->Attribute("radius"));
+			}
+
+			if (animation->Attribute("startang") == NULL)
+				std::cout << "Could not load animation attributes" << std::endl;
+			else{
+				startang = (float)std::stod(animation->Attribute("startang"));
+			}
+
+			if (animation->Attribute("rotang") == NULL)
+				std::cout << "Could not load animation attributes" << std::endl;
+			else{
+				rotang = (float)std::stod(animation->Attribute("rotang"));
+			}
+            c1 = new CircularAnimation(false,id,span, center, radius, startang, rotang);
+			c1->setWaiting(true);
+            
+            this->animationsVec.push_back(c1);
+            
+        } else
+            std::cout << "Unknown type of animation" << std::endl;
+    }
 }
 
 Node * XMLScene::parseNodes(TiXmlElement *nodesElement){
@@ -1158,6 +1362,10 @@ Node * XMLScene::parseNodes(TiXmlElement *nodesElement){
 					n1->addDescendantsRef(descendant->Attribute("id"));
 				}
 			 }
+		
+		 }else if (!strcmp(node->Value(), "animationref")){
+			 if (node->Attribute("id"))
+				 n1->addAnimationRef(node->Attribute("id"));
 
 		 }else std::cout << "Invalid node struture" << std::endl;
 

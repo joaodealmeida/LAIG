@@ -4,6 +4,7 @@
 #include <vector>
 #include "Appearance.h"
 #include "Transforms.h"
+#include "Animation.h"
 
 class Node
 {
@@ -182,6 +183,34 @@ public:
 		this->calculated = calculated;
 	}
 
+	void addAnimation(Animation *a1){
+		this->animations.push_back(a1);
+	}
+
+	void addAnimationRef(std::string a1){
+		this->animations_ref.push_back(a1);
+	}
+
+	std::vector<std::string> getAnimationsRef(){
+		return animations_ref;
+	}
+	std::vector<Animation *> getAnimations(){
+		return this->animations;
+	}
+
+	void startAnimation(unsigned long t){
+		Animation *a=nullptr;
+		if(animations.empty()) return;
+
+		for(int i=0; i < animations.size(); i++){
+			a=animations[i];
+			if(a->getWaiting()){
+				a->update(t);
+				break;
+			}
+		}
+	}
+
 	/*float * getTransformationMatrix(){
 		if(parent == nullptr){
 			return getOwnMatrix();
@@ -204,6 +233,8 @@ private:
 	std::vector<Primitives *> primitives;
 	Node *parent;
 	Appearance *appearance;
+	std::vector<Animation*> animations;
+	std::vector<string> animations_ref;
 	std::string appearance_ref;
 	float transformMatrix[4][4];
 	bool inherited_app;
