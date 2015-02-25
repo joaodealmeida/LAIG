@@ -275,43 +275,42 @@ void DemoScene::display()
 	//materialAppearance->apply();
 	drawScene(x1->sceneGraph->getRootNode());
 	//materialAppearance->apply();
-	//HARDCODED WALLS, since scaled buged
-	Texture *t = new Texture("textures\\winterwall.png","texturaparede",1,1);
-	glPushMatrix();
-		textureAppearance->apply();
-		glTranslatef(10,10,0);
-		glRotatef(180,0,1,0);
-		glRotatef(-90,1,0,0);
-		glScalef(20,1,20);
-		obj->draw();
-	glPopMatrix();
+	
+	/*GLfloat *ctr = new GLfloat[9*3];
+	ctr[0]=3;
+	ctr[1]=0;
+	ctr[2]=-3;
+	ctr[3]=3;
+	ctr[4]=-4;
+	ctr[5]=0;
+	ctr[6]=3;
+	ctr[7]=0;
+	ctr[8]=3;
+	ctr[9]=0;
+	ctr[10]=0;
+	ctr[11]=-3;
+	ctr[12]=0;
+	ctr[13]=-4;
+	ctr[14]=0;
+    ctr[15]=0;
+	ctr[16]=0;
+	ctr[17]=3;
+	ctr[18]=-3;
+	ctr[19]=0;
+	ctr[20]=-3;
+    ctr[21]=-3;
+	ctr[22]=-4;
+	ctr[23]=0;
+	ctr[24]=-3;
+	ctr[25]=0;
+	ctr[26]=3;
 
-	glPushMatrix();
-		textureAppearance->apply();
-		glTranslatef(20,10,10);
-		glRotatef(90,0,1,0);
-		glRotatef(-90,1,0,0);
-		glScalef(20,1,20);
-		obj->draw();
-	glPopMatrix();
-
-	glPushMatrix();
-		textureAppearance->apply();
-		glTranslatef(0,10,10);
-		glRotatef(-90,0,1,0);
-		glRotatef(-90,1,0,0);
-		glScalef(20,1,20);
-		obj->draw();
-	glPopMatrix();
-
-	glPushMatrix();
-		textureAppearance->apply();
-		glTranslatef(10,10,20);
-		glRotatef(-90,1,0,0);
-		glScalef(20,1,20);
-		obj->draw();
-	glPopMatrix();
-
+	Patch *p1 = new Patch(GL_LINE, GL_SMOOTH, 2, 100, 100, "line", ctr);
+	
+	p1-Vehicle *v1 = new Vehicle(GL_LINE, GL_SMOOTH);
+	textureAppearance->apply();
+	v1->draw();>draw();*/
+	
 	for(int i=0; i< x1->omniLightVec.size(); i++){
 		OmniLight * l = x1->omniLightVec[i];
 		l->update();

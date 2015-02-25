@@ -21,8 +21,8 @@ void Flag::draw(){
 			shader->bind(0.05, wind);
 			glActiveTexture(GL_TEXTURE0);
 			text->apply();
-			glRotatef(180,0,1,0);
-			glScalef(5,0.5,5);
+			//glRotatef(180,0,1,0);
+			//glScalef(5,0.5,5);
 			plane->draw();
 			shader->unbind();
 		glPopMatrix();

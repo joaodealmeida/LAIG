@@ -8,7 +8,7 @@
 class CircularAnimation : public Animation
 {
 private:
-	float center[3], radius, startang, rotang,distance,currentAngle,lastRotation,lastAnimation[3];
+	float center[3], radius, startang, rotang,distance,currentAngle,lastAnimation[3];
 public:
 	CircularAnimation(bool repeatable, std::string id, float span, float *center, float radius, float startang, float rotang) : Animation(repeatable, id, span){
 		for(int i=0; i < 3; i++)
@@ -25,7 +25,6 @@ public:
 		previousPoint = 0;
 		this->distance = this->rotang - this->startang;
 		currentAngle = 0;
-		lastRotation=0;
 		for(int i=0; i<3; i++)
 			this->lastAnimation[i]=this->center[i];
 
@@ -35,10 +34,14 @@ public:
 			this->init(t);
 			return;
 		}
-		unsigned long elapsedTime = t - this->startTime;
-		this->startTime = t;
-		this->currentAngle = distance * (elapsedTime / (span*1000)) + startang;
-		if(currentAngle >= rotang){
+		float elapsed = (t-startTime)/10000.0f;
+		printf("Passaram:%f segundos\n", elapsed);
+		float porp = (elapsed / span)*10.0f;
+		printf("Proporcao:%f\n", porp);
+		this->currentAngle = (this->rotang *porp)/10.0f + startang;
+		printf("Angle update: %f\n", this->currentAngle);
+
+		if(porp >=1){
 			if (repeatable)
 				this->reset = true;
 			
@@ -46,22 +49,21 @@ public:
 			return;
 		}
 
-		lastRotation = currentAngle;
 		float c1[3],c2[3],cf[3];
-		c1[0]= cos(currentAngle * (M_PI/180));
+		c1[0]= cos(this->radius* currentAngle * (M_PI/180));
 		c1[1]=0;
-		c1[2]=sin(currentAngle * (M_PI/180));
+		c1[2] = sin(this->radius * currentAngle * (M_PI / 180));
 		for (int i = 0; i < 3; i++){
 			c2[i]=c1[i]*this->radius;
 			cf[i]=this->center[i]+c2[i];
 			this->lastAnimation[i] = cf[i];
 		}
-		printf("LastAnimation %d, %d, %d \n", lastAnimation[0],lastAnimation[1],lastAnimation[2]);
+		printf("LastAnimation %f, %f, %f \n", lastAnimation[0],lastAnimation[1],lastAnimation[2]);
 	}
 	void apply(){
 		glTranslatef(this->lastAnimation[0],this->lastAnimation[1],this->lastAnimation[2]);
 		glRotatef(currentAngle,0,1,0);
-		printf("CurrentAngle: %d\n",currentAngle);
+		printf("Angle apply: %f\n", this->currentAngle);
 	}
 	void setWaiting(bool opt){
 		this->waiting = opt;

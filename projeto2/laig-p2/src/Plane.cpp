@@ -7,10 +7,12 @@
 // Coordenadas dos 4 pontos de controlo (podem ser entendidas como
 //   sendo as coordenadas dos cantos do polígono a visualizar):
 
-const GLfloat Plane::controlPoints[4][3] = { { 0.5, 0, -0.5 },
+
+
+const GLfloat Plane::controlPoints[4][3] = { { -0.5, 0, 0.5 },
+{- 0.5, 0, -0.5 },
 { 0.5, 0, 0.5 },
-{ -0.5, 0, -0.5 },
-{ -0.5, 0, 0.5 } };
+{ 0.5, 0, -0.5 } };
 
 
 const GLfloat Plane::normalComponent[4][3] = { { 0.0, 0.0, 1.0 },
@@ -30,6 +32,7 @@ const GLfloat Plane::texturePoints[4][2] = { { 0.0, 0.0 },
 { 0.0, 1.0 },
 { 1.0, 0.0 },
 { 1.0, 1.0 } };
+
 
 Plane::Plane(GLenum drawstyle, GLenum normal, int parts) : Primitives(drawstyle, normal)
 {
@@ -86,8 +89,8 @@ void Plane::draw(void)
 
 
 	// SEGUE-SE EXEMPLO DE UTILIZACAO DE "EVALUATORS"
-	//glShadeModel(GL_SMOOTH);					// GL_FLAT, GL_SMOOTH
-	/*glEnable(GL_LIGHTING);
+	glShadeModel(GL_SMOOTH);					// GL_FLAT, GL_SMOOTH
+	/*glEnable(GL_LIGHTING);/
 	glEnable(GL_COLOR_MATERIAL);
 	glEnable(GL_TEXTURE_2D);
 	myTexture->apply();*/

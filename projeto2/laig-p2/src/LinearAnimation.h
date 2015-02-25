@@ -121,10 +121,10 @@ public:
 			movZ[1] = 1;
 
 			scalar = movXY[0] * movZ[0] + movXY[1] * movZ[1];
-			n1 = sqrt(pow(movXY[0],2.0f) + pow(movXY[1], 2.0f));
-			n2 = sqrt(pow(movZ[0], 2) + pow(movZ[1], 2.0f));
+			n1 = sqrt(pow(movXY[0], 2.0f) + pow(movXY[1], 2.0f));
+			n2 = sqrt(pow(movZ[0], 2.0f) + pow(movZ[1], 2.0f));
 			rotation = acos(scalar / (n1*n2)) * (180 / M_PI);
-
+			
 		}
 	}
 	

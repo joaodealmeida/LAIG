@@ -1167,7 +1167,8 @@ std::vector<Primitives *> XMLScene::parsePrimitives(TiXmlElement *primitivesElem
 				std::cout << "Criou Patch \n";
 				//otherwise
 				//prim = new Patch(drawstyle,normalstyle,order, partsU, partsV, compute, tempPoints);
-
+		
+		//FLAG			
 		}  else if((!strcmp(primitive->Value(), "flag"))){
 			std::string texture;
 
@@ -1178,7 +1179,11 @@ std::vector<Primitives *> XMLScene::parsePrimitives(TiXmlElement *primitivesElem
 				}
 				
 				prim = new Flag(drawstyle,normalstyle,new Texture(texture,texture,1,1));
-		} else  std::cout << "Invalid primitive" << std::endl;
+		} else if((!strcmp(primitive->Value(), "vehicle"))){
+			
+			prim = new Vehicle(drawstyle,normalstyle);
+
+		}else  std::cout << "Invalid primitive" << std::endl;
         
 		returnVec.push_back(prim);
     }	

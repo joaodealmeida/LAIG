@@ -2,6 +2,7 @@
 #define PATCH_H
 
 #include <string>
+#include <vector>
 #include <CGF\CGFobject.h>
 #include "Primitives.h"
 
@@ -10,6 +11,7 @@ public:
 	Patch(GLenum drawstyle, GLenum normal, int order, int partsU, int partsV, std::string compute, GLfloat *controlPoints);
 	~Patch();
 	void draw();
+	void setDrawStyle(GLenum newstyle);
 
 
 private:
