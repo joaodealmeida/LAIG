@@ -1,0 +1,382 @@
+<anf>
+  <globals>
+    <drawing mode="fill" shading="	"  background="0 0 0 1"/>
+    <culling face="back" order="ccw"/>
+    <lighting enabled="true" local="true" doublesided="false" ambient="0.3 0.3 0.3 1"/>
+  </globals>
+
+  <cameras initial="perspective1">
+  	<!ortho id="x-vision" direction="x" near="-1000" far="1000" left="-19" right="3" top="11" bottom="-3" />
+    <!ortho id="y-vision" direction="y" near="-15" far="50" left="-5" right="15" top="15" bottom="-5" />
+    <!ortho id="z-vision" direction="z" near="-15" far="50" left="-5" right="15" top="15" bottom="-5" />
+    <perspective id="perspective1" near="0.1" far="70.0" angle="45.0" pos="22 22 22" target="0 0 0" />
+	<perspective id="player1" near="0.1" far="70.0" angle="50.0" pos="12 19 5" target="12 6 11" />
+	<perspective id="player2" near="0.1" far="70.0" angle="50.0" pos="12 19 19" target="12 6 13" />
+	<perspective id="menu" near="0.1" far="70.0" angle="40.0" pos="2.5 28.8 3" target="2.5 28.9 0" />
+	<perspective id="p1" near="0.1" far="70.0" angle="40.0" pos="8.5 28.8 3" target="8.5 28.9 0" />
+	<perspective id="p2" near="0.1" far="70.0" angle="40.0" pos="14.5 28.8 3" target="14.5 28.9 0" />
+    
+  </cameras>
+  
+
+  <lights>
+    <light id="Omni" type="omni" enabled="true" pos="4 12 8" marker="false">
+      <component type="ambient" value="1 1 1 1" />
+      <component type="diffuse" value="0.9 0.9 0.9 1" />
+      <component type="specular" value="0.8 0.8 0.8 1" />
+    </light>
+	<light id="Top Light" type="omni" enabled="true" pos="8 8 8" marker="false" >
+			<component type="ambient" value="0.7 0.7 0.7 1" />
+			<component type="diffuse" value="0.8 0.8 0.8 1" />
+			<component type="specular" value="1 1 1 1" />
+	</light>
+		
+    <light id="spot1" type="spot" enabled="false" marker="false" pos="12 16 12" target="12 6 12" angle="10" exponent="10" >
+      <component type="ambient" value="0.2 0.2 0.2 1" />
+      <component type="diffuse" value="0.5 0.5 0.5 1" />
+      <component type="specular" value="0.5 0.5 0.5 1" /> 
+	</light>
+	
+	<light id="spot2" type="spot" enabled="false" marker="false" pos="10 10 10" target="4 2 4"  angle="30" exponent="2" >
+			<component type="ambient" value="0.5 0.5 0.5 1" />
+			<component type="diffuse" value="0.5 0.5 0.5 1" />
+			<component type="specular" value="0.5 0.5 0.5 1" />
+	</light>
+	
+  </lights>
+
+  <textures>
+    <texture id="snowTexture" file="textures\snow.png" texlength_s="1" texlength_t="1" />
+    <texture id="woodTexture" file="textures\wood.jpg" texlength_s="1" texlength_t="1" />
+	<texture id="wallTexture" file="textures\winterwall.png" texlength_s="1" texlength_t="1" />
+	<texture id="squaretexture" file="textures\stone.png" texlength_s="1" texlength_t="1" />
+	<texture id="vehicleTexture" file="textures\stars.jpg" texlength_s="1" texlength_t="1" />
+	<texture id="whiteBlockTexture" file="textures\whiteBlock.jpg" texlength_s="1" texlength_t="1" />
+	<texture id="blueBlockTexture" file="textures\blueBlock.jpg" texlength_s="1" texlength_t="1" />
+	<texture id="blackBlockTexture" file="textures\blackBlock.jpg" texlength_s="1" texlength_t="1" />
+	<texture id="menu" file="textures\Menu.jpg" texlength_s="1" texlength_t="1" />
+	<texture id="player1" file="textures\P1.jpg" texlength_s="1" texlength_t="1" />
+	<texture id="player2" file="textures\P2.jpg" texlength_s="1" texlength_t="1" />
+	<!texture id="woodBlockTexture" file="textures\woodBlock.jpg" texlength_s="1" texlength_t="1" />
+   </textures>
+
+  <appearances>
+    <appearance id="snow" shininess="0.5" textureref="snowTexture">
+      <component type="ambient" value="0.5 0.5 0.5 0.5" />
+      <component type="diffuse" value="0.5 0.5 0.5 0.5" />
+      <component type="specular" value="0.5 0.5 0.5 0.5" />
+    </appearance>
+    <appearance id="squareApp" shininess="128" textureref="squaretexture">
+      <component type="ambient" value="0.8 0.8 0.8 0.8" />
+      <component type="diffuse" value="0.8 0.8 0.8 0.8" />
+      <component type="specular" value="0.8 0.8 0.8 1" />
+    </appearance>
+    <appearance id="woodApprc" shininess="0.5" textureref="woodTexture">
+      <component type="ambient" value="0.5 0.5 0.5 0.5" />
+      <component type="diffuse" value="0.5 0.5 0.5 0.5" />
+      <component type="specular" value="0.5 0.5 0.5 0.5" />
+    </appearance>
+	<appearance id="wallApprc" shininess="0.5" textureref="wallTexture">
+      <component type="ambient" value="0.8 0.8 0.8 0.8" />
+      <component type="diffuse" value="0.8 0.8 0.8 0.8" />
+      <component type="specular" value="0.8 0.8 0.8 1" />
+    </appearance>
+    <appearance id="white" shininess="0.5" textureref="whiteBlockTexture">
+      <component type="ambient" value="0.5 0.5 0.5 0.5" />
+      <component type="diffuse" value="0.5 0.5 0.5 0.5" />
+      <component type="specular" value="0.8 0.8 0.8 1" />
+    </appearance>
+    <appearance id="blue" shininess="0.5" textureref="blueBlockTexture">
+      <component type="ambient" value="0.5 0.5 0.5 0.5" />
+      <component type="diffuse" value="0.5 0.5 0.5 0.5" />
+      <component type="specular" value="0.8 0.8 0.8 1" />
+    </appearance>
+    <appearance id="black" shininess="0.5" textureref="blackBlockTexture">
+      <component type="ambient" value="0.5 0.5 0.5 0.5" />
+      <component type="diffuse" value="0.5 0.5 0.5 0.5" />
+      <component type="specular" value="0.8 0.8 0.8 1" />
+    </appearance>
+    <appearance id="menu" shininess="0.5" textureref="menu">
+      <component type="ambient" value="0.5 0.5 0.5 0.5" />
+      <component type="diffuse" value="0.5 0.5 0.5 0.5" />
+      <component type="specular" value="0.8 0.8 0.8 1" />
+    </appearance>
+    <appearance id="p1" shininess="0.5" textureref="player1">
+      <component type="ambient" value="0.5 0.5 0.5 0.5" />
+      <component type="diffuse" value="0.5 0.5 0.5 0.5" />
+      <component type="specular" value="0.8 0.8 0.8 1" />
+    </appearance>
+    <appearance id="p2" shininess="0.5" textureref="player2">
+      <component type="ambient" value="0.5 0.5 0.5 0.5" />
+      <component type="diffuse" value="0.5 0.5 0.5 0.5" />
+      <component type="specular" value="0.8 0.8 0.8 1" />
+    </appearance>
+    <!appearance id="wood" shininess="0.5" textureref="woodBlockTexture">
+      <!component type="ambient" value="0.5 0.5 0.5 0.5" />
+      <!component type="diffuse" value="0.5 0.5 0.5 0.5" />
+      <!component type="specular" value="0.8 0.8 0.8 1" />
+    <!/appearance>
+  </appearances>
+
+  <animations>
+	<animation id="animacao1" span="30" type="linear">
+			<controlpoint xx="3" yy="4" zz="9" />
+			<controlpoint xx="6" yy="9" zz="14" />
+			<controlpoint xx="9" yy="4" zz="9" />
+			<controlpoint xx="12" yy="9" zz="14" />
+			<controlpoint xx="15" yy="4" zz="9" />
+    </animation>
+	<animation id="snowmanAnimation1" span="20" type="linear">
+			<controlpoint xx="0" yy="0" zz="0" />
+			<controlpoint xx="0" yy="0" zz="13" />
+			<controlpoint xx="5" yy="0" zz="13" />
+			<controlpoint xx="5" yy="0" zz="0" />
+			<controlpoint xx="10" yy="0" zz="0" />
+			<controlpoint xx="10" yy="0" zz="13" />
+			<controlpoint xx="13" yy="0" zz="13" />
+			<controlpoint xx="13" yy="0" zz="0" />
+			
+			
+			</animation>
+	<animation id="circular" span="10" type="circular" center="3 0 0" radius="3" startang="0" rotang="1000" />
+  </animations>
+
+  <graph rootid="scene" >
+    <node id="scene" >
+      <transforms>
+      </transforms>
+      <appearanceref id="white" />
+      <descendants>
+        <noderef id="mesa" />
+		<noderef id="walls" />
+		<noderef id="board" />
+      </descendants> 
+    </node>
+
+	 <node id="walls" displaylist="true">
+      <transforms>
+      </transforms>
+      <appearanceref id="white" />
+      <descendants>
+		<noderef id="sidewall" />
+		<noderef id="wall" />
+		<noderef id="floor" />
+		<noderef id="menu" />
+		<noderef id="p1" />
+		<noderef id="p2" />
+      </descendants> 
+    </node>
+
+    <node id="floor" displaylist="true">
+      <transforms>
+		<transform type="rotate" axis="x" angle="-90" />
+        <transform type="translate" to="0 -25 0"/>
+      </transforms>
+      <appearanceref id="inherit" />
+      <primitives>
+        <rectangle xy1="0 0" xy2="25 25"/>
+      </primitives>
+    </node>
+
+    <node id="menu" displaylist="true">
+      <transforms>
+        <transform type="translate" to="0 26 0"/>
+      </transforms>
+      <appearanceref id="menu" />
+      <primitives>
+        <rectangle xy1="0 0" xy2="5 5"/>
+      </primitives>
+    </node>
+
+    <node id="p1" displaylist="true">
+      <transforms>
+        <transform type="translate" to="6 26 0"/>
+      </transforms>
+      <appearanceref id="p1" />
+      <primitives>
+        <rectangle xy1="0 0" xy2="5 5"/>
+      </primitives>
+    </node>
+
+    <node id="p2" displaylist="true">
+      <transforms>
+        <transform type="translate" to="12 26 0"/>
+      </transforms>
+      <appearanceref id="p2" />
+      <primitives>
+        <rectangle xy1="0 0" xy2="5 5"/>
+      </primitives>
+    </node>
+
+	<node id="sidewall" displaylist="false">
+      <transforms>
+	  <transform type="rotate" axis="x" angle="90" />
+	  <transform type="rotate" axis="z" angle="-90" />
+	  <transform type="translate" to="-12.5 0 -12.5"/>
+	  <transform type="scale" factor="25 0 25"/>
+      </transforms>
+      <appearanceref id="wallApprc" />
+      <primitives>
+        <plane parts="10" />
+      </primitives>
+    </node>
+	<node id="wall" displaylist="true">
+		<transforms>
+			<transform type="translate" to="0 25 0"/>
+			<transform type="rotate" axis="z" angle="-90" />
+		</transforms>
+		<appearanceref id="wallApprc" />
+	<primitives>
+        <patch order="1" partsU="10" partsV="10" compute="fill">
+            <controlpoint x="0" y="0" z="0" />
+            <controlpoint x="0" y="25" z="0" />
+			<controlpoint x="25" y="0" z="0" />
+			<controlpoint x="25" y="25" z="0" />
+		</patch>
+    </primitives>
+	</node>
+
+	<node id="meiaperna1">
+		<appearanceref id="inherit" />
+		<descendants>
+			<noderef id="meiaperna2" />
+		</descendants>
+		<primitives>
+			<patch order="1" partsU="10" partsV="10" compute="fill">
+				<controlpoint x="0" y="0" z="0" />
+				<controlpoint x="0" y="5" z="0" />
+				<controlpoint x="1.5" y="0" z="0" />
+				<controlpoint x="1.5" y="5" z="0" />
+			</patch>
+			<patch order="1" partsU="10" partsV="10" compute="fill">
+				<controlpoint x="0" y="5" z="0" />
+				<controlpoint x="0" y="0" z="0" />
+				<controlpoint x="0" y="5" z="-1.5" />
+				<controlpoint x="0" y="0" z="-1.5" />
+			</patch>
+		</primitives>
+	</node>
+
+	<node id="meiaperna2">
+      <transforms>
+		<transform type="translate" to="1.5 0 -1.5" />
+		<transform type="rotate" axis="y" angle="-180"/>
+      </transforms>
+      <appearanceref id="inherit" />
+	  <primitives>
+			<patch order="1" partsU="10" partsV="10" compute="fill">
+				<controlpoint x="0" y="0" z="0" />
+				<controlpoint x="0" y="5" z="0" />
+				<controlpoint x="1.5" y="0" z="0" />
+				<controlpoint x="1.5" y="5" z="0" />
+			</patch>
+			<patch order="1" partsU="10" partsV="10" compute="fill">
+				<controlpoint x="0" y="5" z="0" />
+				<controlpoint x="0" y="0" z="0" />
+				<controlpoint x="0" y="5" z="-1.5" />
+				<controlpoint x="0" y="0" z="-1.5" />
+			</patch>
+		</primitives>
+
+	</node>
+	<node id="perna1">
+		<transforms>
+				<transform type="translate" to="8 0 1" />
+		</transforms>
+		<appearanceref id="inherit"/>
+		<descendants>
+					<noderef id="meiaperna1" />
+	  </descendants>
+	</node>
+	
+	<node id="perna2">
+		<transforms>
+			<transform type="translate" to="0 0 1" />
+		</transforms>
+		<appearanceref id="inherit"/>
+		<descendants>
+			<noderef id="meiaperna1" />
+	  </descendants>
+	</node>
+	
+	<node id="perna3">
+		<transforms>
+			<transform type="translate" to="0 0 10" />
+		</transforms>
+		<appearanceref id="inherit"/>
+		<descendants>
+			<noderef id="meiaperna1" />
+	  </descendants>
+	</node>
+	
+	<node id="perna4">
+		<transforms>
+			<transform type="translate" to="8 0 10" />
+		</transforms>
+		<appearanceref id="inherit"/>
+		<descendants>
+			<noderef id="meiaperna1" />
+	  </descendants>
+	</node>
+	
+	<node id="tampo">
+      <transforms>
+		<transform type="translate" to="5 6 5" />
+		<transform type="scale" factor="13 0 13"/>
+      </transforms>
+      <appearanceref id="inherit" />
+      <primitives>
+        <plane parts="20" />
+      </primitives>
+    </node>
+
+    <node id="base">
+      <transforms>
+      	<transform type="translate" to="-1.5 5 -1.5"/>
+		<transform type="scale" factor="13 0 13"/>
+		<transform type="rotate" axis="x" angle="-90" />
+		<transform type="rotate" axis="x" angle="180" />
+      </transforms>
+      <appearanceref id="inherit" />
+      <primitives>
+        <rectangle xy1="0 0" xy2="1 1"/>
+      </primitives>
+    </node>
+
+	<node id="border">
+		<transforms>
+				<transform type="translate" to="-1.5 5 11.5" />
+				<transform type="scale" factor="8.66 0.2 8.6" />
+		</transforms>
+		<appearanceref id="inherit"/>
+		<descendants>
+			<noderef id="meiaperna1" />
+	  </descendants>
+	</node>
+	<node id="mesa">
+		<transforms>
+				<transform type="translate" to="7 0 7" />
+		</transforms>
+		<appearanceref id="woodApprc"/>
+		<descendants>
+					<noderef id="perna1" />
+					<noderef id="perna2" />
+					<noderef id="perna3" />
+					<noderef id="perna4" />
+					<noderef id="border" />
+					<noderef id="tampo" />
+					<noderef id="base" />
+	  </descendants>
+	</node>
+	<node id="board">
+		<transforms>
+		</transforms>
+		<appearanceref id="squareApp"/>
+		<primitives>
+			<board />
+		</primitives>
+	</node>
+  </graph>
+
+</anf>
+

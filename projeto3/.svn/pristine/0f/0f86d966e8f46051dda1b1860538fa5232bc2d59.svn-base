@@ -1,0 +1,21 @@
+#ifndef BOARD_H
+#define BOARD_H
+
+#include "CGF\CGFobject.h"
+#include "Primitives.h"
+#include "Rectangle.h"
+
+#include <vector>
+
+class Board : public CGFobject, public Primitives
+{
+	std::vector< std::vector< Primitives*> > board;
+	Rectangle* piece;
+
+public:
+	Board(GLenum drawstyle, GLenum normal);
+	~Board();
+	void draw();
+	void drawVisible();
+};
+#endif

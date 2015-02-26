@@ -1,0 +1,62 @@
+#include "GameReplay.h"
+
+
+GameReplay::GameReplay(std::stack<GameState> replay)
+{
+	this->replay = replay;
+}
+
+
+GameReplay::~GameReplay(void)
+{
+}
+
+GameState GameReplay::getActualGameState(){
+	return this->replay.top();
+}
+
+GameState GameReplay::getPreviousGameState(){
+	return this->oldGS;
+}
+
+std::vector<GameField> GameReplay::getScoredFields(){
+	if(this->playsCounter < 4)
+		return std::vector<GameField>();
+
+	Board diff = this->replay.top().getBoard() - this->oldGS.getBoard();
+
+	return diff.getScoredFields();
+
+}
+
+Block* GameReplay::getPlayedBlock(){
+	 std::vector<Block *> blocks = this->replay.top().getBoard().getBlocks();
+        
+        if (this->playsCounter == 1)
+            return blocks[0];
+        
+        Board diff = this->replay.top().getBoard() - this->oldGS.getBoard();
+}
+
+bool GameReplay::nextMove(){
+	if(!this->replay.size())
+		return false;
+
+	this->playsCounter++;
+	this->oldGS = this->replay.top();
+	this->replay.top();
+
+	return true;
+}
+
+std::string GameReplay::saveReplay(std::stack<GameState> replay){
+	std::stringstream replayss;
+	{
+	cereal::JSONOutputArchive oarchive(replayss);
+	oarchive(replay);
+	}
+
+}
+
+std::stack<GameState> GameReplay::loadReplayData(std::string replay){
+}

@@ -1,0 +1,25 @@
+#include "LeBloq.h"
+
+
+
+LeBloq::LeBloq()
+{
+	this->sckt = new SocketClient(Address, Port);
+	gameType = LeBloqGameTypePlayerVsAI_Easy;
+}
+
+
+LeBloq::~LeBloq()
+{
+}
+
+void LeBloq::setGameType(LeBloqGameType type){
+	this->gameType = type;
+}
+
+LeBloqGameType LeBloq::getGameType(){
+	return this->gameType;
+}
+
+GameState LeBloq::newGame(int boardSizeX, int boardSizeY){
+}

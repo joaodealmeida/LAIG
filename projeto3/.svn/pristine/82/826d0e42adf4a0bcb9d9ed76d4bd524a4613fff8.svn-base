@@ -1,0 +1,45 @@
+#include "Board.h"
+
+
+Board::Board(GLenum drawstyle, GLenum normal): Primitives(drawstyle, normal) {
+	this->piece = new Rectangle(GL_FILL, GL_SMOOTH,0, 0, 4, 4);
+
+
+}
+
+
+Board::~Board() {
+
+}
+
+void Board::draw() {
+
+	glPushMatrix();
+	glScalef(0.2,0.6,0.2);
+	glPushName(-1);
+	glTranslatef(30.5, 7.1, 17);
+	glRotatef(90, 0, 1, 0);
+	glRotatef(90, 0, 0, 1);
+	for (int r=0; r < 12; r++)
+	{
+		glPushMatrix();
+		glTranslatef(0, r*4, 0);
+		glLoadName(r);
+		for (int c=0; c < 12; c++)
+		{
+			glPushMatrix();
+			glTranslatef(0,0,(c)*4);
+			glRotatef(90,0,1,0);
+			glPushName(c);
+				piece->draw();
+			glPopName();
+			glPopMatrix();
+		}
+		glPopMatrix();
+	}
+	glPopMatrix();
+
+}
+
+
+

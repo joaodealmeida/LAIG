@@ -1,0 +1,32 @@
+#include "Board.h"
+#include "GameState.h"
+#include "Block.h"
+#include "cereal/archives/json.hpp"
+#include "cereal/types/stack.hpp"
+
+#include <iostream>
+
+
+
+class GameReplay
+{
+	std::stack<GameState> replay;
+	GameState oldGS;
+	int playsCounter;
+public:
+	GameReplay(std::stack<GameState> replay);
+
+	GameState getActualGameState();
+	GameState getPreviousGameState();
+
+	std::vector<GameField> getScoredFields();
+	Block* getPlayedBlock();
+
+	bool nextMove();
+
+	static std::string saveReplay(std::stack<GameState> replay);
+	static std::stack<GameState> loadReplayData(std::string replay);
+
+
+	~GameReplay(void);
+};

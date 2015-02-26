@@ -1,0 +1,235 @@
+#include "Board.h"
+
+#define HORIZONTAL_OR    'h'
+#define VERTICAL_OR    'v'
+
+#define TYPE1_B   3
+#define TYPE1_S   2
+
+#define TYPE2_B   4
+#define TYPE2_S   2
+
+#define TYPE3_B   4
+#define TYPE3_S   3
+
+
+Board::Board(GLenum drawstyle, GLenum normal): Primitives(drawstyle, normal) {
+	this->piece = new Rectangle(GL_FILL, GL_SMOOTH,0, 0, 1, 1);
+}
+
+Board::Board(std::vector< std::vector< int > > board) {
+	this->board = board;
+}
+
+Board Board::operator-(Board b) {
+        std::vector< std::vector<int> > boardCopy;
+        
+        for (int col = 0; col < this->board.size(); col++) {
+            std::vector<int> line;
+            
+            for (int l = 0; l < this->board[0].size(); l++)
+                line.push_back(0);
+            
+            boardCopy.push_back(line);
+        }
+        
+        for (int col = 0; col < this->board.size(); col++) {
+            std::vector<int> line = this->board[col];
+            
+            for (int p = 0; p < line.size(); p++) {
+                int piece = line[p];
+                
+                if (b.getBoard()[col][p] != piece) {
+                    if (b.getBoard()[col][p] != 0)
+                        boardCopy[col][p] = b.getBoard()[col][p];
+                    else
+                        boardCopy[col][p] = piece;
+                } 
+            }
+        }
+        return Board(boardCopy);
+    }
+
+
+Board::~Board() {
+
+}
+
+void Board::draw() {
+
+        glPushMatrix();
+        glPushName(-1);
+		//Control Boards for now
+		 glPushMatrix();
+				glScalef(2,1,2);
+				glTranslatef(0,0,2.5);
+				glRotatef(-90,1,0,0);
+				glLoadName(100);
+				piece->draw();
+				glLoadName(200);
+				glTranslatef(0,1.5,0);
+				piece->draw();
+				glPopMatrix();
+		//End of Control boards
+        glTranslatef(7, 6.1, 6);
+        glRotatef(90, 0, 1, 0);
+        glRotatef(90, 0, 0, 1);
+        for (int r=0; r < 12; r++)
+        {
+                glPushMatrix();
+                glTranslatef(0, r, 0);
+                glLoadName(r);
+                for (int c=0; c < 12; c++)
+                {
+                        glPushMatrix();
+                        glTranslatef(0,0,(c));
+                        glRotatef(90,0,1,0);
+                        glPushName(c);
+                                piece->draw();
+                        glPopName();
+                        glPopMatrix();
+                }
+                glPopMatrix();
+        }
+        glPopMatrix();
+ 
+}
+
+
+std::vector< std::vector< int > > Board::getBoard(){
+	return this->board;
+}
+
+char Board::getPieceOrientation(std::vector<int> position){
+	int xPos = position[0], yPos = position[1];
+	int type = this->board[yPos][xPos];
+
+	//  Width = 4
+	if (xPos <= 6 && this->board[yPos][xPos + 3] == type)
+        
+        return HORIZONTAL_OR;
+    
+	//  Width = 3
+    else if (xPos <= 7 && this->board[yPos][xPos + 2] == type) {
+        
+		//  Height = 4
+        if (yPos <= 6 && this->board[yPos + 3][xPos] == type)
+            return VERTICAL_OR;
+		//  Height = 2
+        else
+            return HORIZONTAL_OR;
+    
+	//  Width = 2
+    } else {
+        //  Height = 4
+        if (yPos <= 6 && this->board[yPos + 3][xPos] == type)
+            return VERTICAL_OR;
+		//  Height = 3
+        else
+            return VERTICAL_OR;
+        
+    }
+
+}
+
+void Board::removeBlock(std::vector< std::vector< int > > &b, std::vector <int> coordinates){
+	int width, height;
+	
+	int xPos = coordinates[0], yPos = coordinates[1];
+	int type = b[yPos][xPos];
+	char orient = getPieceOrientation(coordinates);
+	
+	switch (type) {
+            
+        case 1:
+            
+            width  = (orient == HORIZONTAL_OR ? TYPE1_B : TYPE1_S);
+            height = (orient == HORIZONTAL_OR ? TYPE1_S : TYPE1_B);
+            
+            break;
+            
+        case 2:
+            
+            width  = (orient == HORIZONTAL_OR ? TYPE2_B : TYPE2_S);
+            height = (orient == HORIZONTAL_OR ? TYPE2_S : TYPE2_B);
+            
+            break;
+            
+        case 3:
+            
+            width  = (orient == HORIZONTAL_OR ? TYPE3_B : TYPE3_S);
+            height = (orient == HORIZONTAL_OR ? TYPE3_S : TYPE3_B);
+            
+            break;
+            
+        default:
+            
+            printf("Unknown Piece Type!\n");
+			exit(1);
+            
+            break;
+            
+    }
+    
+    for (; height; height--, yPos++) 
+        for (int i = xPos; i < xPos + width; i++)
+            b[yPos][i] = 0;
+}
+
+std::vector <GameField> Board::getScoredFields(){
+	std::vector<GameField> returnVec;
+    
+    for (int i = 0; i < this->board.size(); i++) {
+        std::vector<int> line = this->board[i];
+        
+        for (int j = 0; j < line.size(); j++, line = this->board[i]) {
+            int field = line[j];
+            
+            if (field > 3){
+				std::vector <int> pos;
+				pos.push_back(j);
+				pos.push_back(i);
+                returnVec.push_back(GameField(pos, field - 3));
+			}
+        }
+        
+    }
+    
+    return returnVec;
+}
+
+std::vector <Block> Board::getBlocks(){
+	std::vector<Block> blocks;
+	std::vector< std::vector< int > > boardCopy = board;   //  Copy our board so we can modify
+    
+    for (int i = 0; i < boardCopy.size(); i++) {
+        std::vector<int> line = boardCopy[i];
+        
+        for (int j = 0; j < line.size(); j++, line = boardCopy[i]) {
+            int block = line[j];
+            
+            if (block > 0 && block < 4) {
+                
+                //
+                //  (0, 0) of the piece,
+                //  figure out its orientation and then remove it from the array.
+                //
+
+                std::vector <int> position;
+				position.push_back(j);
+				position.push_back(i);
+
+                char orientation = getPieceOrientation(position);
+				removeBlock(boardCopy, position);
+				Block b = Block(GL_FILL, GL_SMOOTH,orientation, block, position);
+				blocks.push_back(b);
+            }
+        }
+    }
+    
+    return blocks;
+}
+
+
+
+

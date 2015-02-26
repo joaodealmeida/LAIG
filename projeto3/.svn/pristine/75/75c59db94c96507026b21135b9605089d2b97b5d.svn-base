@@ -1,0 +1,134 @@
+#include "LeBloq.h"
+#include "PrologParser.h"
+
+#include <sstream>
+#include <ctime>
+
+
+
+LeBloq::LeBloq()
+{
+	this->sckt = new SocketClient(Address, Port);
+	gameType = LeBloqGameTypePlayerVsAI_Easy;
+}
+
+
+LeBloq::~LeBloq()
+{
+}
+
+void LeBloq::setGameType(LeBloqGameType type){
+	this->gameType = type;
+}
+
+LeBloqGameType LeBloq::getGameType(){
+	return this->gameType;
+}
+
+int LeBloq::checkWinner(Board b){
+	return 0;
+}
+
+GameState LeBloq::parseReply(string msg) {
+    msg.erase(0, 3);
+	msg.pop_back();
+    
+    vector< vector<int> > boardV = PrologParser::prologToBoardRepresentation(msg, this->boardsizeX);
+    
+    Board board = Board(boardV);
+    
+    int nextPlayer = (this->gameStates.size() ? (getActualGameState().getPlayer() == 1 ? 2 : 1) : 2);
+    
+    std::cout << "Next Player: " << nextPlayer << std::endl;
+    
+    int winner = 0;
+    
+    bool playing = true;
+    
+    if (this->gameStates.size())
+        if (( winner = checkWinner(board) )) {
+            nextPlayer = winner;
+			playing = false;
+        }
+    
+    GameState state = GameState(board, nextPlayer, playing);
+    
+    this->gameStates.push(state);
+    
+    return state;
+}
+
+GameState LeBloq::newGame(int boardsizeX, int boardsizeY){
+	stringstream ssX,ssY;
+	ssX << boardsizeX;
+	ssY << boardsizeY;
+	
+	sckt->write("initialize(" + ssX.str() + "," + ssY.str() + ").");
+
+	string reply = sckt->read();
+
+	if (reply.find("fail") != string::npos || reply.find("ok(") == string::npos){
+		printf("Unable to create board.\n");
+		exit(1);
+	}
+
+	this->boardsizeX = boardsizeX;
+	this->boardsizeY = boardsizeY;
+
+	GameState actualGS,newGS;
+	
+	actualGS = parseReply(reply);
+	newGS = GameState(actualGS.getBoard(),1, true);
+
+	this->gameStart = (unsigned int) time(NULL);
+	this->turnStart = gameStart;
+
+	cout << newGS.getPlayer() << std::endl;
+
+	while (this->gameStates.size())
+        this->gameStates.pop();
+    
+    this->gameStates.push(newGS);
+    
+    return newGS;
+
+
+
+
+}
+
+GameState LeBloq::getActualGameState(){
+	return this->gameStates.top();
+}
+
+GameState LeBloq::getPreviousGameState(){
+	GameState actual = this->gameStates.top();
+	this->gameStates.pop();
+	GameState previous = getActualGameState();
+	this->gameStates.push(actual);
+	
+	return previous;
+}
+
+stack<GameState> LeBloq::getGameStates(){
+	return this->gameStates;
+}
+void LeBloq::undoGameState(){
+	this->gameStates.pop();
+}
+
+vector <int> LeBloq::getBoardSize(){
+	vector <int> returnVec;
+	returnVec.push_back(this->boardsizeX);
+	returnVec.push_back(this->boardsizeY);
+
+	return returnVec;
+}
+
+unsigned int LeBloq::getTimeElapsed(){
+	return (unsigned int)time(NULL) - this->gameStart;
+}
+
+unsigned int LeBloq::getTurnTimeElapsed(){
+	return (unsigned int)time(NULL) - this->turnStart;
+}

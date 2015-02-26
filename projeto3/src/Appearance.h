@@ -1,0 +1,30 @@
+#pragma once
+#include "CGF\CGFappearance.h"
+#include "Components.h"
+
+class Appearance : public CGFappearance
+{
+public:
+	Appearance(string id, Components *comp, float shin) : CGFappearance(){
+		this->id=id;
+		this->appearanceComponents=comp;
+		this->shininess=shin;
+	}
+
+	string getID(){
+		return id;
+	}
+
+
+	string getTextRef(){
+		return this->texName;
+	}
+	CGFtexture * getTexture(){
+		return texture;
+	}
+
+private:
+	string id;
+	Components *appearanceComponents;
+};
+

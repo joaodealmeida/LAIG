@@ -1,0 +1,318 @@
+#include "TPinterface.h"
+#include "DemoScene.h"
+
+#define BUFSIZE 256
+GLuint selectBuf[BUFSIZE];
+int *choice;
+
+TPinterface::TPinterface(DemoScene *scene)
+{
+	testVar=0;
+	this->scene=scene;
+
+}
+
+void TPinterface::initGUI(){
+	GLUI_Panel *newGamePanel = addPanel(const_cast<char *>(std::string("   New Game").c_str()), 1);
+
+	int id = 0;
+
+	addButtonToPanel(newGamePanel, const_cast<char *>(std::string("Player vs AI      ").c_str()), 1);
+
+	addButtonToPanel(newGamePanel, const_cast<char *>(std::string("      AI vs AI      ").c_str()), 2);
+
+	addButtonToPanel(newGamePanel, const_cast<char *>(std::string("Player vs Player").c_str()), 3);
+
+	GLUI_Panel *spinnerPanel = addPanel(const_cast<char *>(std::string("Time Per Round").c_str()), 1);
+
+	id = 9;
+
+	GLUI_Spinner *spinner = addSpinnerToPanel(spinnerPanel, "Choose",GLUI_SPINNER_INT, NULL, id);
+	spinner->set_speed(1);
+	spinner->set_int_limits(5,60);
+	spinner->set_int_val(10);
+
+
+
+	addColumn();
+
+	GLUI_Panel *optionsPanel = addPanel(const_cast<char *>(std::string("Game Options").c_str()), 1);
+
+	addButtonToPanel(optionsPanel, const_cast<char *>(std::string("   Undo Move    ").c_str()), 4);
+
+	addButtonToPanel(optionsPanel, const_cast<char *>(std::string("    View Movie   ").c_str()), 5);
+
+	addButtonToPanel(optionsPanel, const_cast<char *>(std::string("   Save Movie   ").c_str()), 6);
+
+	GLUI_Panel *themePanel = addPanel(const_cast<char *>(std::string("Game Theme").c_str()), 1);
+
+	addButtonToPanel(themePanel, "Classic", 7);
+	addButtonToPanel(themePanel, "Modern", 8);
+
+	addColumn();
+
+
+	GLUI_Panel *lightsPanel = addPanel(const_cast<char *>(std::string("Lights").c_str()), 1);
+
+
+
+	id = 10;
+
+	for (int i=0; i<scene->getParserResults()->omniLightVec.size(); i++) {
+		OmniLight * l= scene->getParserResults()->omniLightVec[i];
+		GLUI_Checkbox *checkbox = addCheckboxToPanel(lightsPanel, const_cast<char *>(l->getID().c_str()), nullptr, id);
+
+		checkbox->set_int_val(l->getEnabled() ? 1 : 0);
+
+		id++;
+	}
+	for (int i=0; i<scene->getParserResults()->spotLightVec.size(); i++) {
+		SpotLight * l= scene->getParserResults()->spotLightVec[i];
+		GLUI_Checkbox *checkbox = addCheckboxToPanel(lightsPanel, const_cast<char *>(l->getID().c_str()), nullptr, id);
+
+		checkbox->set_int_val(l->getEnabled() ? 1 : 0);
+
+		id++;
+	}
+
+	addColumn();
+
+	id=200;
+
+
+	GLUI_Panel *movePanel = addPanel(const_cast<char *>(std::string("Movement").c_str()), 1);
+	GLUI_Rotation *view_rot = addRotationToPanel(movePanel, const_cast<char *>(std::string("Rotation").c_str()), this->scene->rotCtrl);
+	view_rot->set_spin(0.000001f);
+	//view_rot->reset();
+
+	GLUI_Translation *zoom = addTranslationToPanel(movePanel, const_cast<char *>(std::string("Zoom").c_str()), GLUI_TRANSLATION_Y, this->scene->zoomCtrl);
+	zoom->set_speed(0.05f);
+	
+}
+
+void TPinterface::processGUI(GLUI_Control *ctrl)
+{
+	if (ctrl->user_id < 10) {
+		switch (ctrl->user_id) {
+		case 1:
+			//Change to Player vs AI
+			LeBloq::getInstance().newGame(12,12);
+			LeBloq::getInstance().setGameType(LeBloqGameTypePlayerVsAI_Easy);
+			scene->replayMode = false;
+
+			break;
+
+		case 2:
+			//Change to AI vs AI
+			LeBloq::getInstance().newGame(12,12);
+			LeBloq::getInstance().setGameType(LeBloqGameTypeAIVsAI);
+			scene->replayMode = false;
+			break;
+
+		case 3:
+			//Change to Player vs Player
+			LeBloq::getInstance().newGame(12,12);
+			LeBloq::getInstance().setGameType(LeBloqGameTypePlayerVsPlayer);
+			scene->replayMode = false;
+			break;
+
+		case 4:
+			//Undo Move
+			LeBloq::getInstance().undoGameState();
+			break;
+
+		case 5:
+			//Load Game
+			scene->replayMode = true;
+			break;
+
+		case 6:
+			//Save game
+			scene->replay = GameReplay(LeBloq::getInstance().getGameStates());
+			break;
+
+		case 7:
+			//Change to 'Modern' theme
+			scene->setTheme(0);
+			break;
+
+		case 8:
+			//Change to 'Classic' theme
+			scene->setTheme(1);
+			break;
+
+		case 9:
+			//Change round time
+			std::cout << "Valor:" << ctrl->int_val << std::endl;
+			LeBloq::getInstance().setMaxTurnTime(ctrl->int_val);
+			break;
+
+		default:
+			break;
+		}
+	}else if (ctrl->user_id < 100) {
+		int pos=ctrl->user_id - 10;
+		int spotlimit,omnilimit;
+		vector<OmniLight *> omni = scene->getParserResults()->omniLightVec;
+		vector<SpotLight *> spot = scene->getParserResults()->spotLightVec;
+
+		omnilimit = omni.size();
+		spotlimit = spot.size();
+
+
+		if(pos > spotlimit+omnilimit){
+			std::cout << " Light not found \n" << std::endl;
+			exit(1);
+
+		}else{
+			CGFlight *l1 = scene->sceneLights[pos];
+			if(l1->getEnabled())
+				l1->disable();
+			else
+				l1->enable();
+		}
+	} else if( ctrl->user_id < 200) {
+
+		int camPos = (int)(ctrl->user_id - 100);
+		int ortholimit,perslimit;
+		ortholimit = scene->getParserResults()->OrthocamVec.size();
+		perslimit = scene->getParserResults()->PerscamVec.size();
+		vector<CGFcamera *> cams = scene->sceneCameras; 
+
+		if (cams.size() < camPos)
+			std::cout << "Camera not found \n" << std::endl;
+
+		//Make sure all cameras are disabled
+		for(int i=0; i<scene->getParserResults()->OrthocamVec.size(); i++)
+			scene->getParserResults()->OrthocamVec[i]->setEnabled(false);
+
+		for(int i=0; i<scene->getParserResults()->PerscamVec.size(); i++)
+			scene->getParserResults()->PerscamVec[i]->setEnabled(false);
+
+		if(camPos < ortholimit)
+			scene->getParserResults()->OrthocamVec[camPos]->setEnabled(true);
+
+		if(camPos >  ortholimit-1)
+			scene->getParserResults()->PerscamVec[camPos-ortholimit]->setEnabled(true);
+	}
+}
+
+void TPinterface::processMouse(int button, int state, int x, int y) 
+{
+	CGFinterface::processMouse(button,state, x, y);
+
+	// do picking on mouse press (GLUT_DOWN)
+	// this could be more elaborate, e.g. only performing picking when there is a click (DOWN followed by UP) on the same place
+	if (button == GLUT_LEFT_BUTTON  && state == GLUT_DOWN){
+		performPicking(x,y);
+		std::cout << "----------------------------\n"<<"Working Piece:\nxPos: " << LeBloq::getInstance().workingPiece.getBlockPosition()[0] << "\nyPos: " << LeBloq::getInstance().workingPiece.getBlockPosition()[1] << "\nOri: " << LeBloq::getInstance().workingPiece.getOrientation() << "\nType: " << LeBloq::getInstance().workingPiece.getType() << std::endl;
+	}
+}
+
+void TPinterface::performPicking(int x, int y) 
+{
+	// Sets the buffer to be used for selection and activate selection mode
+	glSelectBuffer (BUFSIZE, selectBuf);
+	glRenderMode(GL_SELECT);
+
+	// Initialize the picking name stack
+	glInitNames();
+
+	// The process of picking manipulates the projection matrix
+	// so we will be activating, saving and manipulating it
+	glMatrixMode(GL_PROJECTION);
+
+	//store current projmatrix to restore easily in the end with a pop
+	glPushMatrix ();
+
+	//get the actual projection matrix values on an array of our own to multiply with pick matrix later
+	GLfloat projmat[16];
+	glGetFloatv(GL_PROJECTION_MATRIX,projmat);
+
+	// reset projection matrix
+	glLoadIdentity();
+
+	// get current viewport and use it as reference for 
+	// setting a small picking window of 5x5 pixels around mouse coordinates for picking
+	GLint viewport[4];
+	glGetIntegerv(GL_VIEWPORT, viewport);
+
+	// this is multiplied in the projection matrix
+	gluPickMatrix ((GLdouble) x, (GLdouble) (CGFapplication::height - y), 5.0, 5.0, viewport);
+
+	// multiply the projection matrix stored in our array to ensure same conditions as in normal render
+	glMultMatrixf(projmat);
+
+	// force scene drawing under this mode
+	// only the names of objects that fall in the 5x5 window will actually be stored in the buffer
+	scene->display();
+
+	// restore original projection matrix
+	glMatrixMode (GL_PROJECTION);
+	glPopMatrix ();
+
+	glFlush();
+
+	// revert to render mode, get the picking results and process them
+	GLint hits;
+	hits = glRenderMode(GL_RENDER);
+	processHits(hits, selectBuf);
+}
+
+void TPinterface::processHits (GLint hits, GLuint buffer[]) 
+{
+	GLuint *ptr = buffer;
+	GLuint mindepth = 0xFFFFFFFF;
+	GLuint *selected=NULL;
+	GLuint nselected;
+
+	// iterate over the list of hits, and choosing the one closer to the viewer (lower depth)
+	for (int i=0;i<hits;i++) {
+		int num = *ptr; ptr++;
+		GLuint z1 = *ptr; ptr++;
+		ptr++;
+		if (z1 < mindepth && num>0) {
+			mindepth = z1;
+			selected = ptr;
+			nselected=num;
+		}
+		for (int j=0; j < num; j++) 
+			ptr++;
+	}
+
+	// if there were hits, the one selected is in "selected", and it consist of nselected "names" (integer ID's)
+	if (selected!=NULL)
+	{
+		// this should be replaced by code handling the picked object's ID's (stored in "selected"), 
+		// possibly invoking a method on the scene class and passing "selected" and "nselected"
+		printf("Picked ID's: ");
+		for (int i=0; i<nselected; i++)
+			printf("%d ",selected[i]);
+		printf("\n");
+
+		if(nselected == 1){
+			//Codigo para alterar orientacao e tipo de peça aqui
+			if(selected[0] == 100){ //Tipo de peca
+				LeBloq::getInstance().pickPiece.switchType();
+				LeBloq::getInstance().workingPiece.switchType();
+			}
+			if(selected[0] == 200){ //Orient de peca
+				LeBloq::getInstance().pickPiece.switchOrientation();
+				LeBloq::getInstance().workingPiece.switchOrientation();
+			}
+
+		} else if(nselected == 2) {
+			vector <int> position;
+			position.push_back(selected[1]);
+			position.push_back(selected[0]);
+
+			if(LeBloq::getInstance().getGameType() != LeBloqGameTypeAIVsAI){
+				LeBloq::getInstance().workingPiece.setPosition(position);
+				LeBloq::getInstance().makePlay();
+			}
+		}
+
+	}
+	else
+		printf("Nothing selected while picking \n");	
+}

@@ -1,0 +1,115 @@
+#ifndef _XMLSCENE_H_
+#define _XMLSCENE_H_
+
+#include "tinyxml.h"
+#include <GL\glut.h>
+#include <string>
+#include <iostream>
+#include <vector>
+#include <math.h>
+#include "PerspectiveCamera.h"
+#include "OrthoCamera.h"
+#include "OmniLight.h"
+#include "SpotLight.h"
+#include "Components.h"
+#include "Texture.h"
+#include "Appearance.h"
+#include "Primitives.h"
+#include "Rectangle.h"
+#include "Triangle.h"
+#include "Cylinder.h"
+#include "Sphere.h"
+#include "Torus.h"
+#include "Plane.h"
+#include "Patch.h"
+#include "Vehicle.h"
+#include "Flag.h"
+#include "Node.h"
+#include "Graph.h"
+#include "Animation.h"
+#include "LinearAnimation.h"
+#include "CircularAnimation.h"
+
+class XMLScene
+{
+public:
+	XMLScene(char *filename);
+	~XMLScene();
+
+	static TiXmlElement *findChildByAttribute(TiXmlElement *parent,const char * attr, const char *val);
+	void parseGlobals(TiXmlElement *globalsElement);
+	void parseCameras(TiXmlElement *camerasElement);
+	void parseLights(TiXmlElement *lightsElement);
+	void parseTextures(TiXmlElement *texturesElement);
+	void parseAppearances(TiXmlElement *appearancesElement);
+	void parseAnimations(TiXmlElement *animationsElement);
+	
+
+	std::vector<Primitives *> parsePrimitives(TiXmlElement *primitivesElement);
+	std::vector<Transforms *> parseTransforms(TiXmlElement *transformesElement);
+
+	Node* parseNodes(TiXmlElement *nodesElement);
+	Graph* parseGraph(TiXmlElement *graphElement);
+
+	void parseReferences();
+	void parseNodesTransformation();
+	void parseDisplayLists(Node *root);
+	void visitNode(Node *root, bool applyLocalTransformation);
+	void drawScene(Node *);
+	
+	
+
+	TiXmlDocument* doc;
+
+	TiXmlElement* globalsElement;
+	TiXmlElement* camerasElement;
+	TiXmlElement* lightsElement;
+	TiXmlElement* texturesElement;
+	TiXmlElement* appearancesElement;
+	TiXmlElement* primitivesElement;
+	TiXmlElement* animationsElement;
+
+
+	//Globals Data
+
+	std::string drawMode,shading, cullFace, cullOrder;
+	GLboolean lightDoubleSided, lightLocal, lightEnabled;
+	GLfloat drawBackground[4], lightAmbient[4];
+	GLenum drawstyle;
+	GLenum normalstyle;
+
+	//Cameras Data
+	std::vector <PerspectiveCamera *> PerscamVec;
+	std::vector <OrthoCamera *> OrthocamVec;
+
+	//Lights
+	std::vector <OmniLight *> omniLightVec;
+	std::vector <SpotLight *> spotLightVec;
+
+	//Textures
+	std::vector<Texture *> texturesVec;
+
+	//Appearances
+	std::vector<Appearance *> appearancesVec;
+
+	//Animations
+	std::vector<Animation *> animationsVec;
+
+	//Graph
+	Graph* sceneGraph;
+
+
+
+
+
+
+
+	TiXmlElement* initElement; 
+	TiXmlElement* matsElement;
+	TiXmlElement* textsElement;
+	TiXmlElement* leavesElement;
+	TiXmlElement* nodesElement;
+	TiXmlElement* graphElement;
+};
+
+#endif
